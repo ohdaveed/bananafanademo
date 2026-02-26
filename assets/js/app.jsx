@@ -92,13 +92,13 @@ const BananafanaWebsiteShowcase = () => {
 
     const changeView = (view) => {
         setCurrentView(view);
-        setVisitedViews((previous) => ({ ...previous, [view]: true }));
+        setVisitedViews((prevVisitedViews) => ({ ...prevVisitedViews, [view]: true }));
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const navigateToSection = (view, sectionId) => {
         setCurrentView(view);
-        setVisitedViews((previous) => ({ ...previous, [view]: true }));
+        setVisitedViews((prevVisitedViews) => ({ ...prevVisitedViews, [view]: true }));
         window.scrollTo({ top: 0, behavior: 'auto' });
         setPendingScrollTarget(sectionId);
     };
@@ -360,7 +360,7 @@ const BananafanaWebsiteShowcase = () => {
         'Phase 4 (Weeks 7–8): QA, accessibility audit, and launch prep'
     ];
 
-    const tabButtonClasses = (view, activeClass) => `px-4 sm:px-5 py-2.5 text-sm sm:text-base rounded-lg font-semibold transition-all ${currentView === view
+    const getTabButtonClasses = (view, activeClass) => `px-4 sm:px-5 py-2.5 text-sm sm:text-base rounded-lg font-semibold transition-all ${currentView === view
         ? `${activeClass} text-white shadow-xl ring-2 ring-offset-2 ring-gray-900/20 scale-[1.02]`
         : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-white hover:border-gray-500'
         }`;
@@ -673,7 +673,7 @@ const BananafanaWebsiteShowcase = () => {
                         <button
                             type="button"
                             onClick={() => changeView('current')}
-                            className={tabButtonClasses('current', 'bg-purple-600')}
+                            className={getTabButtonClasses('current', 'bg-purple-600')}
                             role="tab"
                             aria-selected={currentView === 'current'}
                             aria-controls="panel-current"
@@ -685,7 +685,7 @@ const BananafanaWebsiteShowcase = () => {
                         <button
                             type="button"
                             onClick={() => changeView('wireframes')}
-                            className={tabButtonClasses('wireframes', 'bg-yellow-600')}
+                            className={getTabButtonClasses('wireframes', 'bg-yellow-600')}
                             role="tab"
                             aria-selected={currentView === 'wireframes'}
                             aria-controls="panel-wireframes"
@@ -697,7 +697,7 @@ const BananafanaWebsiteShowcase = () => {
                         <button
                             type="button"
                             onClick={() => changeView('principles')}
-                            className={tabButtonClasses('principles', 'bg-green-700')}
+                            className={getTabButtonClasses('principles', 'bg-green-700')}
                             role="tab"
                             aria-selected={currentView === 'principles'}
                             aria-controls="panel-principles"
@@ -709,7 +709,7 @@ const BananafanaWebsiteShowcase = () => {
                         <button
                             type="button"
                             onClick={() => changeView('structure')}
-                            className={tabButtonClasses('structure', 'bg-blue-700')}
+                            className={getTabButtonClasses('structure', 'bg-blue-700')}
                             role="tab"
                             aria-selected={currentView === 'structure'}
                             aria-controls="panel-structure"
@@ -740,9 +740,9 @@ const BananafanaWebsiteShowcase = () => {
                                     className="w-full md:w-auto bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700"
                                 >
                                     <option value="">Jump to section…</option>
-                                    {TAB_OVERVIEW.map((entry) => (
-                                        <option key={entry.key} value={`${entry.key}|${entry.targetId}`}>
-                                            {entry.title} ({entry.readTime})
+                                    {TAB_OVERVIEW.map((tabEntry) => (
+                                        <option key={tabEntry.key} value={`${tabEntry.key}|${tabEntry.targetId}`}>
+                                            {tabEntry.title} ({tabEntry.readTime})
                                         </option>
                                     ))}
                                 </select>
@@ -794,16 +794,16 @@ const BananafanaWebsiteShowcase = () => {
                 <section className="mb-6 sm:mb-8 bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-6 shadow-lg">
                     <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Table of Contents</h2>
                     <div className="grid md:grid-cols-2 gap-4">
-                        {TAB_OVERVIEW.map((entry) => (
-                            <article key={entry.key} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        {TAB_OVERVIEW.map((tabEntry) => (
+                            <article key={tabEntry.key} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-2">
-                                    <h3 className="font-bold text-gray-900">{entry.title}</h3>
-                                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{entry.readTime}</span>
+                                    <h3 className="font-bold text-gray-900">{tabEntry.title}</h3>
+                                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{tabEntry.readTime}</span>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-3">{entry.description}</p>
+                                <p className="text-sm text-gray-600 mb-3">{tabEntry.description}</p>
                                 <button
                                     type="button"
-                                    onClick={() => navigateToSection(entry.key, entry.targetId)}
+                                    onClick={() => navigateToSection(tabEntry.key, tabEntry.targetId)}
                                     className="bg-white text-gray-900 px-3 py-2 rounded-lg border border-gray-300 font-semibold text-sm hover:shadow-md transition-all"
                                 >
                                     Jump to Section
@@ -844,7 +844,7 @@ const BananafanaWebsiteShowcase = () => {
                                     <div className="flex items-center justify-center mb-3">
                                         <button
                                             type="button"
-                                            onClick={() => setIsWalkthroughExpanded((previous) => !previous)}
+                                            onClick={() => setIsWalkthroughExpanded((isExpanded) => !isExpanded)}
                                             className="bg-white text-gray-900 px-4 py-2 rounded-lg border border-gray-300 font-semibold hover:shadow-md transition-all"
                                             aria-expanded={isWalkthroughExpanded}
                                             aria-controls="walkthrough-video"
@@ -995,17 +995,17 @@ const BananafanaWebsiteShowcase = () => {
 
                         {/* Section Selector */}
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
-                            {Object.keys(wireframes).map((key) => (
+                            {Object.keys(wireframes).map((wireframeKey) => (
                                 <button
                                     type="button"
-                                    key={key}
-                                    onClick={() => setSelectedWireframe(key)}
-                                    className={`p-4 rounded-lg font-semibold transition-all ${selectedWireframe === key
+                                    key={wireframeKey}
+                                    onClick={() => setSelectedWireframe(wireframeKey)}
+                                    className={`p-4 rounded-lg font-semibold transition-all ${selectedWireframe === wireframeKey
                                         ? 'bg-gradient-to-r from-yellow-400 to-green-400 text-white shadow-lg'
                                         : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-yellow-400'
                                         }`}
                                 >
-                                    {wireframes[key].title.split(' - ')[0]}
+                                    {wireframes[wireframeKey].title.split(' - ')[0]}
                                 </button>
                             ))}
                         </div>
@@ -1044,8 +1044,8 @@ const BananafanaWebsiteShowcase = () => {
                                     <span className="text-sm text-gray-500">Expand / Collapse</span>
                                 </summary>
                                 <div className="px-5 pb-5 grid md:grid-cols-2 gap-3">
-                                    {currentWireframe.elements.map((element, idx) => (
-                                        <div key={idx} className="flex items-start gap-3 bg-white p-4 rounded-lg border border-green-200">
+                                    {currentWireframe.elements.map((element, elementIndex) => (
+                                        <div key={elementIndex} className="flex items-start gap-3 bg-white p-4 rounded-lg border border-green-200">
                                             <Icons.CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                                             <span className="text-gray-700">{element}</span>
                                         </div>
@@ -1077,15 +1077,15 @@ const BananafanaWebsiteShowcase = () => {
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Design System Overview</h3>
                             <p className="text-gray-600 mb-5">This section translates strategy into implementation-ready guidance for design and development teams.</p>
                             <div className="grid md:grid-cols-2 gap-4">
-                                {DESIGN_SYSTEM_DOCS.map((doc) => (
-                                    <details key={doc.title} open={doc.title === 'Typography Specs'} className="bg-gray-50 border border-gray-200 rounded-lg">
+                                {DESIGN_SYSTEM_DOCS.map((designDoc) => (
+                                    <details key={designDoc.title} open={designDoc.title === 'Typography Specs'} className="bg-gray-50 border border-gray-200 rounded-lg">
                                         <summary className="px-4 py-3 font-bold text-gray-900 flex items-center justify-between">
-                                            <span>{doc.title}</span>
+                                            <span>{designDoc.title}</span>
                                             <span className="text-xs text-gray-500">Expand / Collapse</span>
                                         </summary>
                                         <ul className="px-6 pb-4 list-disc text-sm text-gray-700 space-y-2">
-                                            {doc.items.map((item) => (
-                                                <li key={item}>{item}</li>
+                                            {designDoc.items.map((docItem) => (
+                                                <li key={docItem}>{docItem}</li>
                                             ))}
                                         </ul>
                                     </details>
@@ -1118,10 +1118,10 @@ const BananafanaWebsiteShowcase = () => {
                                 <p><GlossaryTip term="WCAG 2.2" definition="Web Content Accessibility Guidelines version 2.2" /> contrast guidance, NN/g findings on visual hierarchy and readability, and evidence summaries on early-learning color environment design.</p>
                             </div>
                         </section>
-                        {designPrinciples.map((principle, idx) => {
+                        {designPrinciples.map((principle, principleIndex) => {
                             const PrincipleIcon = Icons[principle.icon];
                             return (
-                                <div key={idx} className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                                <div key={principleIndex} className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
                                     <div className="flex flex-col md:flex-row items-start gap-6">
                                         <div className="bg-green-100 p-4 rounded-lg">
                                             <PrincipleIcon className="w-8 h-8 text-green-600" />
@@ -1146,20 +1146,20 @@ const BananafanaWebsiteShowcase = () => {
 
                             {/* Palette Selector Tabs */}
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-                                {Object.entries(colorPalettes).map(([key, palette]) => (
+                                {Object.entries(colorPalettes).map(([paletteKey, palette]) => (
                                     <button
                                         type="button"
-                                        key={key}
-                                        onClick={() => setSelectedPalette(key)}
-                                        className={`p-4 rounded-lg transition-all text-left ${selectedPalette === key
+                                        key={paletteKey}
+                                        onClick={() => setSelectedPalette(paletteKey)}
+                                        className={`p-4 rounded-lg transition-all text-left ${selectedPalette === paletteKey
                                             ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg scale-105'
                                             : 'bg-gray-50 border-2 border-gray-200 hover:border-green-400'
                                             }`}
                                     >
-                                        <p className={`font-bold mb-1 ${selectedPalette === key ? 'text-white' : 'text-gray-900'}`}>
+                                        <p className={`font-bold mb-1 ${selectedPalette === paletteKey ? 'text-white' : 'text-gray-900'}`}>
                                             {palette.name}
                                         </p>
-                                        <p className={`text-xs ${selectedPalette === key ? 'text-green-100' : 'text-gray-500'}`}>
+                                        <p className={`text-xs ${selectedPalette === paletteKey ? 'text-green-100' : 'text-gray-500'}`}>
                                             {palette.mood}
                                         </p>
                                     </button>
@@ -1192,8 +1192,8 @@ const BananafanaWebsiteShowcase = () => {
                                     </div>
 
                                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
-                                        {Object.entries(currentPalette.colors).map(([key, color]) => (
-                                            <div key={key} className="text-center">
+                                        {Object.entries(currentPalette.colors).map(([colorKey, color]) => (
+                                            <div key={colorKey} className="text-center">
                                                 <div
                                                     className="h-28 rounded-lg shadow-lg mb-3 border-2 border-gray-300 transition-transform hover:scale-105"
                                                     style={{ backgroundColor: color.hex }}
@@ -1251,10 +1251,10 @@ const BananafanaWebsiteShowcase = () => {
                         </div>
 
                         <div className="space-y-4">
-                            {keyPages.map((page, idx) => {
+                            {keyPages.map((page, pageIndex) => {
                                 const PageIcon = PAGE_ICONS[page.name] || Icons.FileText;
                                 return (
-                                    <details key={idx} open={idx === 0} className="bg-white rounded-lg shadow-xl border-2 border-gray-200">
+                                    <details key={pageIndex} open={pageIndex === 0} className="bg-white rounded-lg shadow-xl border-2 border-gray-200">
                                         <summary className="px-6 py-5">
                                             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                                 <div className="flex items-start gap-3">
@@ -1281,8 +1281,8 @@ const BananafanaWebsiteShowcase = () => {
                                         <div className="px-6 pb-6">
                                             <p className="text-sm font-semibold text-gray-700 mb-3">Sections:</p>
                                             <div className="flex flex-wrap gap-2">
-                                                {page.sections.map((section, sIdx) => (
-                                                    <div key={sIdx} className="bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 text-sm text-blue-900">
+                                                {page.sections.map((section, sectionIndex) => (
+                                                    <div key={sectionIndex} className="bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 text-sm text-blue-900">
                                                         {section}
                                                     </div>
                                                 ))}
@@ -1303,24 +1303,24 @@ const BananafanaWebsiteShowcase = () => {
                                     { step: 'Trust', action: 'Read reviews & credentials', bg: '#f3e8ff', border: '#a855f7', icon: Icons.Users },
                                     { step: 'Act', action: 'Schedule tour', bg: '#fef9c3', border: '#eab308', icon: Icons.MessageSquare },
                                     { step: 'Convert', action: 'Enroll', bg: '#fee2e2', border: '#ef4444', icon: Icons.CheckCircle2 }
-                                ].map((item, idx) => (
-                                    <React.Fragment key={idx}>
+                                ].map((journeyStep, stepIndex) => (
+                                    <React.Fragment key={stepIndex}>
                                         <div className="flex flex-col items-center">
                                             <div
                                                 className="w-20 h-20 rounded-full flex items-center justify-center mb-3"
-                                                style={{ backgroundColor: item.bg, borderWidth: '4px', borderStyle: 'solid', borderColor: item.border }}
-                                                aria-label={`Step ${idx + 1}: ${item.step}`}
+                                                style={{ backgroundColor: journeyStep.bg, borderWidth: '4px', borderStyle: 'solid', borderColor: journeyStep.border }}
+                                                aria-label={`Step ${stepIndex + 1}: ${journeyStep.step}`}
                                             >
                                                 <div className="text-center">
-                                                    <item.icon className="w-5 h-5 mx-auto text-gray-900" />
-                                                    <span className="text-sm font-bold text-gray-900">{idx + 1}</span>
+                                                    <journeyStep.icon className="w-5 h-5 mx-auto text-gray-900" />
+                                                    <span className="text-sm font-bold text-gray-900">{stepIndex + 1}</span>
                                                 </div>
                                             </div>
-                                            <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Step {idx + 1}</p>
-                                            <p className="font-bold text-gray-900 mb-1">{item.step}</p>
-                                            <p className="text-sm text-gray-600 text-center max-w-24">{item.action}</p>
+                                            <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Step {stepIndex + 1}</p>
+                                            <p className="font-bold text-gray-900 mb-1">{journeyStep.step}</p>
+                                            <p className="text-sm text-gray-600 text-center max-w-24">{journeyStep.action}</p>
                                         </div>
-                                        {idx < 4 && (
+                                        {stepIndex < 4 && (
                                             <Icons.ChevronRight className="hidden md:block w-8 h-8 text-gray-400" />
                                         )}
                                     </React.Fragment>
@@ -1331,9 +1331,9 @@ const BananafanaWebsiteShowcase = () => {
                         <section className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Success Metrics & Measurement Plan</h3>
                             <div className="grid md:grid-cols-2 gap-4 mb-6">
-                                {SUCCESS_METRICS.map((metric) => (
-                                    <div key={metric} className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900 font-medium">
-                                        {metric}
+                                {SUCCESS_METRICS.map((successMetric) => (
+                                    <div key={successMetric} className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900 font-medium">
+                                        {successMetric}
                                     </div>
                                 ))}
                             </div>
@@ -1344,9 +1344,9 @@ const BananafanaWebsiteShowcase = () => {
                         <section className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Implementation Roadmap</h3>
                             <div className="space-y-3">
-                                {IMPLEMENTATION_ROADMAP.map((phase, index) => (
+                                {IMPLEMENTATION_ROADMAP.map((phase, phaseIndex) => (
                                     <div key={phase} className="flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                        <span className="w-7 h-7 rounded-full bg-gray-900 text-white text-sm font-bold flex items-center justify-center mt-0.5">{index + 1}</span>
+                                        <span className="w-7 h-7 rounded-full bg-gray-900 text-white text-sm font-bold flex items-center justify-center mt-0.5">{phaseIndex + 1}</span>
                                         <p className="text-sm text-gray-700 font-medium">{phase}</p>
                                     </div>
                                 ))}
