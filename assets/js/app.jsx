@@ -652,7 +652,7 @@ const { useState, useEffect, useMemo } = React;
             const currentWireframe = wireframes[selectedWireframe];
 
             return (
-                <main id="main-content">
+                <main id="main-content" tabIndex={-1}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
                     <nav aria-label="Presentation sections">
                     <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
