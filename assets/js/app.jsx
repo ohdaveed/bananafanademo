@@ -75,20 +75,20 @@ const Icons = {
     )
 };
 
-        const BananafanaWebsiteShowcase = () => {
-            const [currentView, setCurrentView] = useState('wireframes');
-            const [selectedWireframe, setSelectedWireframe] = useState('hero');
-            const [showMobile, setShowMobile] = useState(false);
-            const [selectedPalette, setSelectedPalette] = useState('nurturing');
-            const [isWalkthroughExpanded, setIsWalkthroughExpanded] = useState(false);
-            const [scrollProgress, setScrollProgress] = useState(0);
-            const [visitedViews, setVisitedViews] = useState({
-                current: false,
-                wireframes: true,
-                principles: false,
-                structure: false
-            });
-            const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
+const BananafanaWebsiteShowcase = () => {
+    const [currentView, setCurrentView] = useState('wireframes');
+    const [selectedWireframe, setSelectedWireframe] = useState('hero');
+    const [showMobile, setShowMobile] = useState(false);
+    const [selectedPalette, setSelectedPalette] = useState('nurturing');
+    const [isWalkthroughExpanded, setIsWalkthroughExpanded] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const [visitedViews, setVisitedViews] = useState({
+        current: false,
+        wireframes: true,
+        principles: false,
+        structure: false
+    });
+    const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
 
     const changeView = (view) => {
         setCurrentView(view);
@@ -96,21 +96,21 @@ const Icons = {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-            const navigateToSection = (view, sectionId) => {
-                setCurrentView(view);
-                setVisitedViews((previous) => ({ ...previous, [view]: true }));
-                window.scrollTo({ top: 0, behavior: 'auto' });
-                setPendingScrollTarget(sectionId);
-            };
+    const navigateToSection = (view, sectionId) => {
+        setCurrentView(view);
+        setVisitedViews((previous) => ({ ...previous, [view]: true }));
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        setPendingScrollTarget(sectionId);
+    };
 
-            useLayoutEffect(() => {
-                if (!pendingScrollTarget) return;
-                const targetSection = document.getElementById(pendingScrollTarget);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    setPendingScrollTarget(null);
-                }
-            }, [pendingScrollTarget]);
+    useLayoutEffect(() => {
+        if (!pendingScrollTarget) return;
+        const targetSection = document.getElementById(pendingScrollTarget);
+        if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setPendingScrollTarget(null);
+        }
+    }, [pendingScrollTarget]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -218,13 +218,13 @@ const Icons = {
 
     const currentPalette = colorPalettes[selectedPalette];
 
-            const ACTION_LINKS = {
-                scheduleTour: 'mailto:hello@bananafana.com?subject=Schedule%20a%20Tour',
-                tuitionGuide: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request',
-                contactAdmissions: 'mailto:hello@bananafana.com?subject=Admissions%20Question',
-                discoveryCall: 'mailto:hello@bananafana.com?subject=Discovery%20Call%20Request',
-                liveSite: 'index.html'
-            };
+    const ACTION_LINKS = {
+        scheduleTour: 'mailto:hello@bananafana.com?subject=Schedule%20a%20Tour',
+        tuitionGuide: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request',
+        contactAdmissions: 'mailto:hello@bananafana.com?subject=Admissions%20Question',
+        discoveryCall: 'mailto:hello@bananafana.com?subject=Discovery%20Call%20Request',
+        liveSite: 'index.html'
+    };
 
     const VIEW_LABELS = {
         current: 'Current Site',
@@ -361,8 +361,8 @@ const Icons = {
     ];
 
     const tabButtonClasses = (view, activeClass) => `px-4 sm:px-5 py-2.5 text-sm sm:text-base rounded-lg font-semibold transition-all ${currentView === view
-            ? `${activeClass} text-white shadow-xl ring-2 ring-offset-2 ring-gray-900/20 scale-[1.02]`
-            : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-white hover:border-gray-500'
+        ? `${activeClass} text-white shadow-xl ring-2 ring-offset-2 ring-gray-900/20 scale-[1.02]`
+        : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-white hover:border-gray-500'
         }`;
 
     const currentSection = Math.min(
@@ -393,14 +393,21 @@ const Icons = {
             return;
         }
 
-                const focusedTab = event.target.closest('[role="tab"]');
-                if (!focusedTab) return;
-                const focusedView = focusedTab.id.replace('tab-', '');
-                const currentIndex = VIEW_ORDER.indexOf(focusedView);
-                if (currentIndex === -1) {
-                    return;
-                }
+        // Find the currently focused tab element
+        const focusedTab = event.target.closest('[role="tab"]');
+        if (!focusedTab) {
+            return;
+        }
 
+        // Extract the view key from the focused tab's id (e.g., "tab-wireframes" → "wireframes")
+        const focusedTabId = focusedTab.id;
+        const focusedView = focusedTabId ? focusedTabId.replace('tab-', '') : null;
+
+        if (!focusedView || !VIEW_ORDER.includes(focusedView)) {
+            return;
+        }
+
+        const currentIndex = VIEW_ORDER.indexOf(focusedView);
         let nextView = null;
 
         if (event.key === 'ArrowRight') {
@@ -484,7 +491,7 @@ const Icons = {
             colorScheme: 'Color-coded: Green (infants-calm), Blue (toddlers-focus), Yellow accents (preschool-energy)',
             mockup: `╔════════════════════════════════════════════════════╗
 ║              OUR PROGRAMS                          ║
-╠══════════════╦══════════════╦══════════════════════╣
+╠════════════════════════════════════════════════════╣
 ║  INFANTS     ║  TODDLERS    ║  PRESCHOOL          ║
 ║  (6wks-18mo) ║  (18mo-3yr)  ║  (3-5 years)        ║
 ╠══════════════╬══════════════╬══════════════════════╣
@@ -658,10 +665,10 @@ const Icons = {
 
     const currentWireframe = wireframes[selectedWireframe];
 
-            return (
-                <main id="main-content" tabIndex={-1}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
-                    <nav aria-label="Presentation sections">
+    return (
+        <main id="main-content" tabIndex={-1}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
+                <nav aria-label="Presentation sections">
                     <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
                         <button
                             type="button"
@@ -994,8 +1001,8 @@ const Icons = {
                                     key={key}
                                     onClick={() => setSelectedWireframe(key)}
                                     className={`p-4 rounded-lg font-semibold transition-all ${selectedWireframe === key
-                                            ? 'bg-gradient-to-r from-yellow-400 to-green-400 text-white shadow-lg'
-                                            : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-yellow-400'
+                                        ? 'bg-gradient-to-r from-yellow-400 to-green-400 text-white shadow-lg'
+                                        : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-yellow-400'
                                         }`}
                                 >
                                     {wireframes[key].title.split(' - ')[0]}
@@ -1145,8 +1152,8 @@ const Icons = {
                                         key={key}
                                         onClick={() => setSelectedPalette(key)}
                                         className={`p-4 rounded-lg transition-all text-left ${selectedPalette === key
-                                                ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg scale-105'
-                                                : 'bg-gray-50 border-2 border-gray-200 hover:border-green-400'
+                                            ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg scale-105'
+                                            : 'bg-gray-50 border-2 border-gray-200 hover:border-green-400'
                                             }`}
                                     >
                                         <p className={`font-bold mb-1 ${selectedPalette === key ? 'text-white' : 'text-gray-900'}`}>
@@ -1261,8 +1268,8 @@ const Icons = {
                                                 </div>
                                                 <div className="flex items-center gap-3">
                                                     <div className={`px-3 py-1 rounded-lg font-semibold text-sm ${page.priority === 'Critical'
-                                                            ? 'bg-red-100 text-red-700 border-2 border-red-400'
-                                                            : 'bg-yellow-100 text-yellow-700 border-2 border-yellow-400'
+                                                        ? 'bg-red-100 text-red-700 border-2 border-red-400'
+                                                        : 'bg-yellow-100 text-yellow-700 border-2 border-yellow-400'
                                                         }`}>
                                                         {page.priority}
                                                     </div>
@@ -1446,54 +1453,7 @@ class ErrorBoundary extends React.Component {
 
 // Render the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const handleTabKeyboardNavigation = (event) => {
-    const targetTag = event.target.tagName;
-    if (targetTag === 'INPUT' || targetTag === 'TEXTAREA' || targetTag === 'SELECT') {
-        return;
-    }
 
-    // Find the currently focused tab element
-    const focusedTab = event.target.closest('[role="tab"]');
-    if (!focusedTab) {
-        return;
-    }
-
-    // Extract the view key from the focused tab's id (e.g., "tab-wireframes" → "wireframes")
-    const focusedTabId = focusedTab.id;
-    const focusedView = focusedTabId ? focusedTabId.replace('tab-', '') : null;
-
-    if (!focusedView || !VIEW_ORDER.includes(focusedView)) {
-        return;
-    }
-
-    const currentIndex = VIEW_ORDER.indexOf(focusedView);
-    let nextView = null;
-
-    if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        nextView = VIEW_ORDER[(currentIndex + 1) % VIEW_ORDER.length];
-    }
-
-    if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        nextView = VIEW_ORDER[(currentIndex - 1 + VIEW_ORDER.length) % VIEW_ORDER.length];
-    }
-
-    if (event.key === 'Home') {
-        event.preventDefault();
-        nextView = VIEW_ORDER[0];
-    }
-
-    if (event.key === 'End') {
-        event.preventDefault();
-        nextView = VIEW_ORDER[VIEW_ORDER.length - 1];
-    }
-
-    if (nextView) {
-        changeView(nextView);
-        const nextTabEl = document.getElementById(`tab-${nextView}`);
-        if (nextTabEl) nextTabEl.focus();
-    }
 root.render(
     <ErrorBoundary>
         <BananafanaWebsiteShowcase />
