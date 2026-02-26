@@ -3,5 +3,11 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"AutoPreview.serverURL": "http://localhost:4000",
+		"AutoPreview.background": "white",
+		"AutoPreview.center": true,
+		"AutoPreview.locked": true
+	}
 }

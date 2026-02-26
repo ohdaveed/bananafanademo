@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls -lh *.html)"
+      "Read(//c/Users/david/.claude/projects/c--Users-david-Downloads-bananafanademo/580a428f-4b60-4cba-bb0d-fcd4aff407b0/tool-results/**)",
+      "Bash(powershell -Command \"Start-Process index.html\")",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot"
     ]
   }
 }

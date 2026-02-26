@@ -43,6 +43,11 @@ const Icons = {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
     ),
+    ChevronLeft: ({ className }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+    ),
     ChevronDown: ({ className }) => (
         <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -219,11 +224,8 @@ const BananafanaWebsiteShowcase = () => {
     const currentPalette = colorPalettes[selectedPalette];
 
     const ACTION_LINKS = {
-        scheduleTour: 'mailto:hello@bananafana.com?subject=Schedule%20a%20Tour',
-        tuitionGuide: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request',
-        contactAdmissions: 'mailto:hello@bananafana.com?subject=Admissions%20Question',
         discoveryCall: 'mailto:hello@bananafana.com?subject=Discovery%20Call%20Request',
-        liveSite: 'index.html'
+        contactEmail: 'mailto:hello@bananafana.com'
     };
 
     const VIEW_LABELS = {
@@ -273,10 +275,10 @@ const BananafanaWebsiteShowcase = () => {
     };
 
     const TAB_BUTTON_CONFIG = [
-        { view: 'current', activeBgClass: 'bg-purple-600', icon: Icons.Globe },
-        { view: 'wireframes', activeBgClass: 'bg-yellow-600', icon: Icons.Layout },
-        { view: 'principles', activeBgClass: 'bg-green-700', icon: Icons.Palette },
-        { view: 'structure', activeBgClass: 'bg-blue-700', icon: Icons.FileText },
+        { view: 'current', icon: Icons.Globe },
+        { view: 'wireframes', icon: Icons.Layout },
+        { view: 'principles', icon: Icons.Palette },
+        { view: 'structure', icon: Icons.FileText },
     ];
 
     const PAGE_ICONS = {
@@ -367,20 +369,19 @@ const BananafanaWebsiteShowcase = () => {
         'Phase 4 (Weeks 7–8): QA, accessibility audit, and launch prep'
     ];
 
-    const tabButtonClasses = (view, activeClass) => `px-4 sm:px-5 py-2.5 text-sm sm:text-base rounded-lg font-semibold transition-all ${currentView === view
-        ? `${activeClass} text-white shadow-xl ring-2 ring-offset-2 ring-gray-900/20 scale-[1.02]`
-        : 'bg-gray-100 text-gray-700 border-2 border-gray-300 hover:bg-white hover:border-gray-500'
-        }`;
-
     const currentSection = Math.min(
         VIEW_SECTION_TOTALS[currentView],
         Math.max(1, Math.ceil((scrollProgress / 100) * VIEW_SECTION_TOTALS[currentView]))
     );
 
+    const currentViewIndex = VIEW_ORDER.indexOf(currentView);
+    const prevView = currentViewIndex > 0 ? VIEW_ORDER[currentViewIndex - 1] : null;
+    const nextView = currentViewIndex < VIEW_ORDER.length - 1 ? VIEW_ORDER[currentViewIndex + 1] : null;
+
     const TakeawayBanner = ({ text }) => (
-        <div className="bg-white border-l-4 border-indigo-500 border border-indigo-200 text-indigo-950 rounded-lg px-4 py-3 font-medium flex items-start gap-2">
-            <Icons.Lightbulb className="w-5 h-5 text-indigo-600 mt-0.5 flex-shrink-0" />
-            <p>{text}</p>
+        <div className="bg-amber-400 rounded-xl px-5 py-4 flex items-start gap-3 shadow-sm">
+            <Icons.Lightbulb className="w-5 h-5 text-amber-900 mt-0.5 flex-shrink-0" />
+            <p className="text-sm font-semibold text-amber-950">{text}</p>
         </div>
     );
 
@@ -444,53 +445,83 @@ const BananafanaWebsiteShowcase = () => {
         }
     };
 
-    const TabHeader = ({ icon: HeaderIcon, title, description }) => (
-        <section className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-            <div className="flex items-start gap-3">
-                <div className="bg-blue-100 p-2 rounded-lg border border-blue-200">
-                    <HeaderIcon className="w-5 h-5 text-blue-700" />
+    const TAB_HERO_META = {
+        current: {
+            eyebrow: 'CURRENT STATE ANALYSIS',
+            title: ['Current Site', 'Audit'],
+            subtitle: 'Review what works today and what blocks parents from moving to action.',
+            bgClass: 'hero-current'
+        },
+        wireframes: {
+            eyebrow: 'LAYOUT STRATEGY',
+            title: ['Wireframe', 'Strategy'],
+            subtitle: 'Validate page structure and information flow before visual polish.',
+            bgClass: 'hero-wireframes'
+        },
+        principles: {
+            eyebrow: 'DESIGN RATIONALE',
+            title: ['Design', 'Principles'],
+            subtitle: 'Connect color, typography, spacing, and accessibility choices to parent trust.',
+            bgClass: 'hero-principles'
+        },
+        structure: {
+            eyebrow: 'INFORMATION ARCHITECTURE',
+            title: ['Site', 'Structure'],
+            subtitle: 'Align page hierarchy, KPIs, and implementation planning.',
+            bgClass: 'hero-structure'
+        }
+    };
+
+    const TabHero = ({ viewKey }) => {
+        const meta = TAB_HERO_META[viewKey];
+        if (!meta) return null;
+        const ghostNumber = String(currentViewIndex + 1).padStart(2, '0');
+        return (
+            <section className={`${meta.bgClass} -mx-4 sm:-mx-6 lg:-mx-8 px-6 sm:px-8 lg:px-10 py-12 sm:py-16 relative overflow-hidden`}>
+                <div className="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none" aria-hidden="true">
+                    <span className="text-9xl font-black text-white">{ghostNumber}</span>
                 </div>
-                <div>
-                    <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-                    <p className="text-sm text-gray-600 mt-1">{description}</p>
+                <div className="relative z-10">
+                    <p className="text-xs font-bold tracking-widest text-amber-400 uppercase mb-3">{meta.eyebrow}</p>
+                    <h2 className="text-4xl sm:text-5xl font-black text-white mb-2">
+                        {meta.title[0]} <span className="text-gradient-amber">{meta.title[1]}</span>
+                    </h2>
+                    <p className="text-base sm:text-lg text-slate-300 max-w-2xl">{meta.subtitle}</p>
                 </div>
-            </div>
-        </section>
-    );
+            </section>
+        );
+    };
 
     const TabPanel = ({ viewKey, children }) => {
         if (!visitedViews[viewKey]) return null;
-        const header = TAB_HEADERS[viewKey];
         return (
             <div
                 id={`panel-${viewKey}`}
                 role="tabpanel"
                 aria-labelledby={`tab-${viewKey}`}
                 hidden={currentView !== viewKey}
-                className={`space-y-6 ${currentView === viewKey ? 'panel-enter' : ''}`}
+                className={`space-y-6 ${currentView === viewKey ? 'slide-enter' : ''}`}
             >
-                <TakeawayBanner text={TAB_TAKEAWAYS[viewKey]} />
-                <TabHeader icon={header.icon} title={header.title} description={header.description} />
-                {children}
+                <TabHero viewKey={viewKey} />
+                <div className="px-4 sm:px-6 lg:px-8">
+                    <TakeawayBanner text={TAB_TAKEAWAYS[viewKey]} />
+                    {children}
+                </div>
             </div>
         );
     };
 
-    const NextStepCTA = ({ color, message, buttonLabel, targetView }) => {
-        const colorClasses = {
-            indigo: { wrapper: 'bg-indigo-50 border border-indigo-200', title: 'text-xl font-bold text-indigo-950', text: 'text-indigo-900', button: 'bg-indigo-700 hover:bg-indigo-800 px-6 py-3' },
-            amber: { wrapper: 'bg-amber-50 border border-amber-200', title: 'text-lg font-bold text-amber-900', text: 'text-amber-800', button: 'bg-amber-700 hover:bg-amber-800 px-5 py-2' },
-            green: { wrapper: 'bg-green-50 border border-green-200', title: 'text-lg font-bold text-green-900', text: 'text-green-800', button: 'bg-green-700 hover:bg-green-800 px-5 py-2' },
-        };
-        const classes = colorClasses[color];
-        return (
-            <div className={`${classes.wrapper} p-6 rounded-lg text-center`}>
-                <h3 className={`${classes.title} mb-2`}>Next Step</h3>
-                <p className={`${classes.text} mb-4`}>{message}</p>
-                <button type="button" onClick={() => changeView(targetView)} className={`${classes.button} text-white rounded-lg font-semibold transition-all`}>{buttonLabel}</button>
-            </div>
-        );
-    };
+    const NextStepCTA = ({ message, buttonLabel, targetView }) => (
+        <div className="bg-slate-900 rounded-2xl px-6 sm:px-8 py-8 text-center border border-slate-700 mt-2">
+            <p className="text-xs font-bold tracking-widest text-amber-400 uppercase mb-3">Next Step</p>
+            <p className="text-base sm:text-lg text-slate-300 mb-6 max-w-lg mx-auto">{message}</p>
+            <button type="button" onClick={() => changeView(targetView)}
+                className="inline-flex items-center gap-2 bg-amber-400 text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-amber-500 transition-all shadow-lg shadow-amber-400/20">
+                {buttonLabel}
+                <Icons.ChevronRight className="w-4 h-4" />
+            </button>
+        </div>
+    );
 
     const wireframes = useMemo(() => ({
         hero: {
@@ -706,124 +737,160 @@ const BananafanaWebsiteShowcase = () => {
 
     const currentWireframe = wireframes[selectedWireframe];
 
+    const Masthead = () => (
+        <header className="bg-slate-900 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 mb-0">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 sm:gap-8">
+                <div className="flex-1">
+                    <p className="text-xs font-bold tracking-widest text-amber-400 uppercase mb-2">Website Redesign Concepts</p>
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-3">
+                        🍌 Bananafana <span className="text-gradient-amber">Preschool</span>
+                    </h1>
+                    <p className="text-base sm:text-lg text-slate-400">Modern, trust-building design for parent conversions</p>
+                </div>
+                <div className="flex flex-col gap-3 sm:items-end">
+                    <div className="bg-red-600 px-4 py-2 rounded-lg font-bold text-white text-xs tracking-widest">
+                        CONFIDENTIAL
+                    </div>
+                    <div className="text-right">
+                        <p className="text-sm text-slate-400">Slide {currentViewIndex + 1} of {VIEW_ORDER.length}</p>
+                        <p className="text-xs text-slate-500 mt-1">Use arrow keys to navigate</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+    );
+
     return (
         <main id="main-content" tabIndex={-1}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
-                <nav aria-label="Presentation sections">
-                    <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
-                        {TAB_BUTTON_CONFIG.map(({ view, activeBgClass, icon: TabIcon }) => (
-                            <button
-                                key={view}
-                                type="button"
-                                onClick={() => changeView(view)}
-                                className={tabButtonClasses(view, activeBgClass)}
-                                role="tab"
-                                aria-selected={currentView === view}
-                                aria-controls={`panel-${view}`}
-                                id={`tab-${view}`}
-                            >
-                                <TabIcon className="inline w-5 h-5 mr-2" />
-                                {VIEW_LABELS[view]}
-                            </button>
-                        ))}
-                        <div className="w-full mt-2">
-                            <div className="max-w-4xl mx-auto bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium text-center">
-                                Now Viewing: {VIEW_LABELS[currentView]} · Section {currentSection} of {VIEW_SECTION_TOTALS[currentView]}
-                            </div>
-                            <div className="max-w-4xl mx-auto mt-2 h-2 rounded-full bg-gray-200 overflow-hidden" aria-hidden="true">
-                                <div className="h-full bg-blue-600 transition-all" style={{ width: `${scrollProgress}%` }}></div>
-                            </div>
-                            <div className="max-w-4xl mx-auto mt-3">
-                                <label htmlFor="quick-jump" className="sr-only">Jump to section</label>
-                                <select
-                                    id="quick-jump"
-                                    defaultValue=""
-                                    onChange={(event) => {
-                                        const [view, sectionId] = event.target.value.split('|');
-                                        if (view && sectionId) {
-                                            navigateToSection(view, sectionId);
-                                        }
-                                        event.target.selectedIndex = 0;
-                                    }}
-                                    className="w-full md:w-auto bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700"
+            <div className="bg-slate-50 min-h-screen">
+                <Masthead />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                    <nav aria-label="Presentation sections" className="nav-dark sticky top-0 z-40 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 rounded-b-lg shadow-md mb-8">
+                        {/* Row 1: Numbered tab pills */}
+                        <div className="flex items-center justify-start gap-2 sm:gap-3 flex-wrap mb-4 pb-4 border-b border-slate-700" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
+                            {VIEW_ORDER.map((view, idx) => (
+                                <button
+                                    key={view}
+                                    type="button"
+                                    onClick={() => changeView(view)}
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
+                                        currentView === view
+                                            ? 'bg-slate-700 border border-amber-400/40 text-white'
+                                            : 'hover:bg-slate-800 border border-slate-600 text-slate-300'
+                                    }`}
+                                    role="tab"
+                                    aria-selected={currentView === view}
+                                    aria-controls={`panel-${view}`}
+                                    id={`tab-${view}`}
                                 >
-                                    <option value="">Jump to section…</option>
-                                    {TAB_OVERVIEW.map((entry) => (
-                                        <option key={entry.key} value={`${entry.key}|${entry.targetId}`}>
-                                            {entry.title} ({entry.readTime})
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                                    <span className="text-xs font-black text-amber-400 tracking-wider">
+                                        {String(idx + 1).padStart(2, '0')}
+                                    </span>
+                                    <span>{VIEW_LABELS[view]}</span>
+                                </button>
+                            ))}
                         </div>
-                    </div>
-                </nav>
 
-                <a
-                    href="index.html"
-                    aria-label="Open live site"
-                    className="hidden md:inline-flex fixed bottom-5 right-5 z-20 bg-blue-700 text-white px-5 py-3 rounded-full font-bold shadow-2xl border border-blue-500 hover:bg-blue-800 transition-all"
-                >
-                    Open Live Site
-                </a>
+                        {/* Row 2: Navigation controls, progress bar, and jump menu */}
+                        <div className="flex items-center justify-between gap-4">
+                            {/* Prev/Next buttons */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => prevView && changeView(prevView)}
+                                    disabled={!prevView}
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    aria-label="Previous slide"
+                                >
+                                    <Icons.ChevronLeft className="w-4 h-4" />
+                                    <span className="hidden sm:inline">Prev</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => nextView && changeView(nextView)}
+                                    disabled={!nextView}
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-sm font-medium bg-amber-400 text-slate-900 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-amber-400/20"
+                                    aria-label="Next slide"
+                                >
+                                    <span className="hidden sm:inline">Next</span>
+                                    <Icons.ChevronRight className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            {/* Progress bar */}
+                            <div className="hidden sm:flex flex-1 items-center gap-3 px-4">
+                                <div className="flex-1 h-1.5 rounded-full bg-slate-700 overflow-hidden" aria-hidden="true">
+                                    <div className="h-full bg-amber-400 transition-all" style={{ width: `${scrollProgress}%` }}></div>
+                                </div>
+                                <span className="text-xs text-slate-400 whitespace-nowrap">
+                                    {currentSection} / {VIEW_SECTION_TOTALS[currentView]}
+                                </span>
+                            </div>
+
+                            {/* Jump dropdown */}
+                            <label htmlFor="quick-jump" className="sr-only">Jump to section</label>
+                            <select
+                                id="quick-jump"
+                                defaultValue=""
+                                onChange={(event) => {
+                                    const [view, sectionId] = event.target.value.split('|');
+                                    if (view && sectionId) {
+                                        navigateToSection(view, sectionId);
+                                    }
+                                    event.target.selectedIndex = 0;
+                                }}
+                                className="bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm text-slate-300 hover:border-slate-500 hover:bg-slate-700 transition-all"
+                            >
+                                <option value="">Jump…</option>
+                                {TAB_OVERVIEW.map((entry) => (
+                                    <option key={entry.key} value={`${entry.key}|${entry.targetId}`}>
+                                        {entry.title} ({entry.readTime})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </nav>
+
                 {scrollProgress > 18 ? (
                     <button
                         type="button"
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className="fixed bottom-5 left-5 z-20 bg-gray-900 text-white px-4 py-2 rounded-full font-semibold shadow-xl border border-gray-700 hover:bg-gray-800 transition-all"
+                        className="fixed bottom-5 left-5 z-20 bg-amber-400 text-slate-900 px-4 py-2 rounded-full font-semibold shadow-xl shadow-amber-400/20 hover:bg-amber-500 transition-all"
                     >
                         Back to Top
                     </button>
                 ) : null}
-                <div className="text-center mb-8 sm:mb-12">
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <span className="text-4xl sm:text-5xl">🍌</span>
-                        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Bananafana Preschool</h1>
-                    </div>
-                    <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto mb-2">
-                        Website Redesign Concepts & Wireframes
-                    </p>
-                    <p className="text-sm sm:text-lg text-gray-500">
-                        Modern, trust-building design for parent conversions
-                    </p>
-                </div>
 
-                <section className="mb-6 sm:mb-8 bg-white rounded-xl border-2 border-blue-200 p-4 sm:p-6 shadow-lg">
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <details className="mb-6 sm:mb-8 bg-slate-800 rounded-xl border border-slate-700 shadow-sm">
+                    <summary className="cursor-pointer flex items-center gap-3 px-6 py-4 hover:bg-slate-700/50 transition-colors font-semibold text-white">
+                        <Icons.Lightbulb className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                        How to use this pitch deck
+                    </summary>
+                    <div className="px-6 py-6 border-t border-slate-700 space-y-5">
                         <div>
-                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">How to use this pitch</h2>
-                            <p className="text-gray-700 mb-2"><strong>30-second summary:</strong> This deck audits the current experience, shows wireframe options, explains design rationale, and maps a conversion-focused site architecture.</p>
-                            <p className="text-gray-700"><strong>Recommended order:</strong> 1) Current Site → 2) Wireframes → 3) Design Principles → 4) Site Structure.</p>
+                            <p className="text-sm text-slate-300 mb-2"><strong className="text-white">30-second summary:</strong> This deck audits the current experience, shows wireframe options, explains design rationale, and maps a conversion-focused site architecture.</p>
+                            <p className="text-sm text-slate-400"><strong className="text-slate-300">Recommended order:</strong> 1) Current Site → 2) Wireframes → 3) Design Principles → 4) Site Structure.</p>
                         </div>
-                        <a href={ACTION_LINKS.liveSite} className="md:hidden inline-flex bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold self-start">Open Live Site</a>
-                    </div>
-                </section>
-
-                <section className="mb-6 sm:mb-8 bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-6 shadow-lg">
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Table of Contents</h2>
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {TAB_OVERVIEW.map((entry) => (
-                            <article key={entry.key} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="font-bold text-gray-900">{entry.title}</h3>
-                                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{entry.readTime}</span>
-                                </div>
-                                <p className="text-sm text-gray-600 mb-3">{entry.description}</p>
+                        <div className="grid sm:grid-cols-2 gap-3 pt-2">
+                            {TAB_OVERVIEW.map((entry) => (
                                 <button
+                                    key={entry.key}
                                     type="button"
                                     onClick={() => navigateToSection(entry.key, entry.targetId)}
-                                    className="bg-white text-gray-900 px-3 py-2 rounded-lg border border-gray-300 font-semibold text-sm hover:shadow-md transition-all"
+                                    className="text-left bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-amber-400/40 rounded-lg p-4 transition-all"
                                 >
-                                    Jump to Section
+                                    <h3 className="font-semibold text-white mb-1">{entry.title}</h3>
+                                    <p className="text-xs text-slate-400 mb-2">{entry.description}</p>
+                                    <span className="text-xs bg-amber-400/20 text-amber-300 px-2 py-1 rounded-full">{entry.readTime}</span>
                                 </button>
-                            </article>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </section>
+                </details>
 
                 {/* Current Site View */}
                 <TabPanel viewKey="current">
-                        <div id="current-site-audit" className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-purple-200">
+                        <div id="current-site-audit" className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <div className="flex items-start justify-between mb-6">
                                 <div>
                                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
@@ -873,9 +940,9 @@ const BananafanaWebsiteShowcase = () => {
 
                             {/* Analysis Grid */}
                             <div className="grid md:grid-cols-2 gap-6">
-                                <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-                                    <h3 className="font-bold text-purple-900 mb-3 flex items-center gap-2">
-                                        <Icons.Sparkles className="w-5 h-5" />
+                                <div className="bg-white p-6 rounded-lg border-l-4 border-amber-400">
+                                    <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                        <Icons.Sparkles className="w-5 h-5 text-amber-400" />
                                         What's Working
                                     </h3>
                                     <ul className="space-y-2 text-sm text-gray-700">
@@ -898,30 +965,30 @@ const BananafanaWebsiteShowcase = () => {
                                     </ul>
                                 </div>
 
-                                <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-                                    <h3 className="font-bold text-yellow-900 mb-3 flex items-center gap-2">
-                                        <Icons.AlertCircle className="w-5 h-5" />
+                                <div className="bg-white p-6 rounded-lg border-l-4 border-slate-400">
+                                    <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                        <Icons.AlertCircle className="w-5 h-5 text-slate-400" />
                                         Opportunities for Improvement
                                     </h3>
                                     <ul className="space-y-2 text-sm text-gray-700">
                                         <li className="flex items-start gap-2">
-                                            <span className="text-yellow-600 font-bold mt-0.5">→</span>
+                                            <span className="text-slate-400 font-bold mt-0.5">→</span>
                                             <span>Needs clear CTAs (Schedule Tour, Enroll Now)</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                            <span className="text-yellow-600 font-bold mt-0.5">→</span>
+                                            <span className="text-slate-400 font-bold mt-0.5">→</span>
                                             <span>Missing trust elements (licensing, credentials)</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                            <span className="text-yellow-600 font-bold mt-0.5">→</span>
+                                            <span className="text-slate-400 font-bold mt-0.5">→</span>
                                             <span>Could benefit from consistent color psychology</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                            <span className="text-yellow-600 font-bold mt-0.5">→</span>
+                                            <span className="text-slate-400 font-bold mt-0.5">→</span>
                                             <span>Navigation and site structure not immediately clear</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                            <span className="text-yellow-600 font-bold mt-0.5">→</span>
+                                            <span className="text-slate-400 font-bold mt-0.5">→</span>
                                             <span>Mobile responsiveness and accessibility optimizations needed</span>
                                         </li>
                                     </ul>
@@ -929,27 +996,27 @@ const BananafanaWebsiteShowcase = () => {
                             </div>
 
                             {/* Design Evolution */}
-                            <div className="mt-6 bg-gradient-to-r from-purple-100 to-blue-100 p-6 rounded-lg border-2 border-purple-300">
-                                <h3 className="font-bold text-gray-900 mb-4 text-lg">📊 Design Evolution Strategy</h3>
+                            <div className="mt-6 bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                                <h3 className="font-bold text-white mb-4 text-lg">📊 Design Evolution Strategy</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="bg-white p-4 rounded-lg">
-                                        <p className="font-semibold text-purple-900 mb-2">Keep & Enhance</p>
-                                        <p className="text-xs text-gray-600">Playful banana branding, child-friendly imagery, warm aesthetic</p>
+                                    <div className="bg-slate-700 p-4 rounded-lg border border-slate-600">
+                                        <p className="font-semibold text-amber-400 mb-2">Keep & Enhance</p>
+                                        <p className="text-xs text-slate-300">Playful banana branding, child-friendly imagery, warm aesthetic</p>
                                     </div>
-                                    <div className="bg-white p-4 rounded-lg">
-                                        <p className="font-semibold text-green-900 mb-2">Add & Optimize</p>
-                                        <p className="text-xs text-gray-600">Trust badges, clear CTAs, parent testimonials, mobile-first layout</p>
+                                    <div className="bg-slate-700 p-4 rounded-lg border border-slate-600">
+                                        <p className="font-semibold text-amber-400 mb-2">Add & Optimize</p>
+                                        <p className="text-xs text-slate-300">Trust badges, clear CTAs, parent testimonials, mobile-first layout</p>
                                     </div>
-                                    <div className="bg-white p-4 rounded-lg">
-                                        <p className="font-semibold text-blue-900 mb-2">Modernize</p>
-                                        <p className="text-xs text-gray-600">Research-backed color palette, conversion optimization, accessibility</p>
+                                    <div className="bg-slate-700 p-4 rounded-lg border border-slate-600">
+                                        <p className="font-semibold text-amber-400 mb-2">Modernize</p>
+                                        <p className="text-xs text-slate-300">Research-backed color palette, conversion optimization, accessibility</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* CTA */}
-                        <NextStepCTA color="indigo" message="Move to wireframes to see the proposed conversion-first layout and content structure." buttonLabel="Go to Wireframes" targetView="wireframes" />
+                        <NextStepCTA message="Move to wireframes to see the proposed conversion-first layout and content structure." buttonLabel="Go to Wireframes" targetView="wireframes" />
                 </TabPanel>
 
                 {/* Wireframes View */}
@@ -996,7 +1063,7 @@ const BananafanaWebsiteShowcase = () => {
                         </div>
 
                         {/* Wireframe Display */}
-                        <div id="wireframe-display" className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                        <div id="wireframe-display" className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <div className="flex flex-col md:flex-row items-start justify-between mb-6 gap-4">
                                 <div>
                                     <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
@@ -1039,12 +1106,12 @@ const BananafanaWebsiteShowcase = () => {
                             </details>
                         </div>
 
-                        <NextStepCTA color="amber" message="Move to Design Principles to see the research and system decisions behind these layouts." buttonLabel="Go to Design Principles" targetView="principles" />
+                        <NextStepCTA message="Move to Design Principles to see the research and system decisions behind these layouts." buttonLabel="Go to Design Principles" targetView="principles" />
                 </TabPanel>
 
                 {/* Design Principles View */}
                 <TabPanel viewKey="principles">
-                        <section id="principles-overview" className="bg-white rounded-lg border-2 border-green-200 p-6 shadow-lg">
+                        <section id="principles-overview" className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Design System Overview</h3>
                             <p className="text-gray-600 mb-5">This section translates strategy into implementation-ready guidance for design and development teams.</p>
                             <div className="grid md:grid-cols-2 gap-4">
@@ -1064,7 +1131,7 @@ const BananafanaWebsiteShowcase = () => {
                             </div>
                         </section>
 
-                        <section className="bg-white rounded-lg border-2 border-yellow-200 p-6 shadow-lg">
+                        <section className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Color Do's and Don'ts</h3>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -1092,7 +1159,7 @@ const BananafanaWebsiteShowcase = () => {
                         {designPrinciples.map((principle, idx) => {
                             const PrincipleIcon = Icons[principle.icon];
                             return (
-                                <div key={idx} className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                                <div key={idx} className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                                     <div className="flex flex-col md:flex-row items-start gap-6">
                                         <div className="bg-green-100 p-4 rounded-lg">
                                             <PrincipleIcon className="w-8 h-8 text-green-600" />
@@ -1100,7 +1167,7 @@ const BananafanaWebsiteShowcase = () => {
                                         <div className="flex-1">
                                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">{principle.title}</h3>
                                             <p className="text-lg text-gray-600 mb-4">{principle.description}</p>
-                                            <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-green-500">
+                                            <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-amber-400">
                                                 <p className="text-sm font-semibold text-gray-700 mb-1">Example:</p>
                                                 <p className="text-gray-600 text-sm">{principle.example}</p>
                                             </div>
@@ -1111,7 +1178,7 @@ const BananafanaWebsiteShowcase = () => {
                         })}
 
                         {/* Color Palette Selector */}
-                        <div className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                        <div className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Choose Your Color Palette</h3>
                             <p className="text-gray-600 mb-6">Select from research-backed preschool color schemes</p>
 
@@ -1195,7 +1262,7 @@ const BananafanaWebsiteShowcase = () => {
                             </details>
                         </div>
 
-                        <NextStepCTA color="green" message="Continue to Site Structure to connect these design choices to page hierarchy and implementation scope." buttonLabel="Go to Site Structure" targetView="structure" />
+                        <NextStepCTA message="Continue to Site Structure to connect these design choices to page hierarchy and implementation scope." buttonLabel="Go to Site Structure" targetView="structure" />
                 </TabPanel>
 
                 {/* Site Structure View */}
@@ -1251,7 +1318,7 @@ const BananafanaWebsiteShowcase = () => {
                         </div>
 
                         {/* User Journey */}
-                        <div className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                        <div className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Typical Parent Journey</h3>
                             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                                 {[
@@ -1285,7 +1352,7 @@ const BananafanaWebsiteShowcase = () => {
                             </div>
                         </div>
 
-                        <section className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                        <section className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Success Metrics & Measurement Plan</h3>
                             <div className="grid md:grid-cols-2 gap-4 mb-6">
                                 {SUCCESS_METRICS.map((metric) => (
@@ -1298,7 +1365,7 @@ const BananafanaWebsiteShowcase = () => {
                             <p className="text-sm text-gray-600">Suggested measurement windows: 30 days, 90 days, and 6 months post-launch.</p>
                         </section>
 
-                        <section className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                        <section className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Implementation Roadmap</h3>
                             <div className="space-y-3">
                                 {IMPLEMENTATION_ROADMAP.map((phase, index) => (
@@ -1310,7 +1377,7 @@ const BananafanaWebsiteShowcase = () => {
                             </div>
                         </section>
 
-                        <section className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-gray-200">
+                        <section className="bg-white rounded-2xl shadow-sm p-5 sm:p-8 border border-slate-200">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Developer Handoff Checklist</h3>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
@@ -1350,28 +1417,26 @@ const BananafanaWebsiteShowcase = () => {
                 </TabPanel>
 
                 {/* Footer CTA */}
-                <div className="mt-12 bg-gradient-to-r from-yellow-300 via-green-300 to-blue-400 p-5 sm:p-8 rounded-lg shadow-xl border border-blue-200">
-                    <div className="text-center">
-                        <h3 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-900">Ready to Build This?</h3>
-                        <p className="text-base sm:text-xl mb-6 text-gray-950">
-                            Move from recommendation to execution with one primary action and clear supporting resources.
+                <div className="mt-12 footer-cta -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-10 sm:py-12 rounded-t-2xl shadow-xl">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <p className="text-xs font-bold tracking-widest text-amber-400 uppercase mb-4">Next Steps</p>
+                        <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
+                            Ready to Build <span className="text-gradient-amber">This?</span>
+                        </h3>
+                        <p className="text-base sm:text-lg text-slate-300 mb-8 max-w-2xl mx-auto">
+                            Let's discuss your vision for Bananafana's online presence and create a modern, conversion-focused experience.
                         </p>
-                        <div className="flex flex-wrap justify-center gap-4 mb-4">
-                            <div className="text-center">
-                                <a href={ACTION_LINKS.discoveryCall} className="bg-gray-900 text-white px-8 py-4 rounded-lg font-bold hover:shadow-xl transition-all inline-block">Book Discovery Call</a>
-                                <p className="text-xs text-gray-700 mt-2">Opens email draft for kickoff conversation.</p>
-                            </div>
-                            <div className="text-center">
-                                <a href={ACTION_LINKS.tuitionGuide} className="bg-white text-gray-900 px-8 py-4 rounded-lg font-bold border border-gray-400 hover:shadow-xl transition-all inline-block">Download Tuition Guide</a>
-                                <p className="text-xs text-gray-700 mt-2">Opens email draft to request latest tuition PDF.</p>
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-3">
-                            <a href={ACTION_LINKS.scheduleTour} className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold border border-gray-300 hover:shadow-md transition-all">Schedule a Tour</a>
-                            <a href={ACTION_LINKS.contactAdmissions} className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold border border-gray-300 hover:shadow-md transition-all">Contact Admissions</a>
-                            <a href={ACTION_LINKS.liveSite} className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold border border-gray-300 hover:shadow-md transition-all">Open Live Site</a>
+                        <div className="flex flex-col sm:flex-row justify-center gap-4">
+                            <a href={ACTION_LINKS.discoveryCall} className="inline-flex items-center gap-2 bg-amber-400 text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-amber-500 transition-all shadow-lg shadow-amber-400/20">
+                                Start Discovery Call
+                                <Icons.ChevronRight className="w-4 h-4" />
+                            </a>
+                            <a href={ACTION_LINKS.contactEmail} className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-bold text-slate-300 border border-slate-600 hover:border-amber-400/40 hover:text-white hover:bg-slate-800 transition-all">
+                                Send Email
+                            </a>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </main>
