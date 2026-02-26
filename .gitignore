@@ -1,0 +1,20 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+
+# Dependencies (if added later)
+node_modules/
+.env
+.env.local
+
+# Large files (for development only)
+# Uncomment if needed:
+# image.png
+
+# Build artifacts
+dist/
+build/
