@@ -1,4 +1,4 @@
-const { useState, useEffect, useMemo } = React;
+const { useState, useEffect, useLayoutEffect, useMemo } = React;
 
         // Lucide React Icons (simplified inline SVG versions)
         const Icons = {
@@ -88,6 +88,7 @@ const { useState, useEffect, useMemo } = React;
                 principles: false,
                 structure: false
             });
+            const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
 
             const changeView = (view) => {
                 setCurrentView(view);
@@ -99,13 +100,17 @@ const { useState, useEffect, useMemo } = React;
                 setCurrentView(view);
                 setVisitedViews((previous) => ({ ...previous, [view]: true }));
                 window.scrollTo({ top: 0, behavior: 'auto' });
-                setTimeout(() => {
-                    const targetSection = document.getElementById(sectionId);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 80);
+                setPendingScrollTarget(sectionId);
             };
+
+            useLayoutEffect(() => {
+                if (!pendingScrollTarget) return;
+                const targetSection = document.getElementById(pendingScrollTarget);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setPendingScrollTarget(null);
+                }
+            }, [pendingScrollTarget]);
 
             useEffect(() => {
                 const handleScroll = () => {
