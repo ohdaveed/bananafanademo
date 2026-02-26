@@ -214,7 +214,7 @@ const { useState, useEffect, useMemo } = React;
             const currentPalette = colorPalettes[selectedPalette];
 
             const ACTION_LINKS = {
-                scheduleTour: 'index.html#admissions',
+                scheduleTour: 'mailto:hello@bananafana.com?subject=Schedule%20a%20Tour',
                 tuitionGuide: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request',
                 contactAdmissions: 'mailto:hello@bananafana.com?subject=Admissions%20Question',
                 discoveryCall: 'mailto:hello@bananafana.com?subject=Discovery%20Call%20Request',
@@ -389,7 +389,10 @@ const { useState, useEffect, useMemo } = React;
                     return;
                 }
 
-                const currentIndex = VIEW_ORDER.indexOf(currentView);
+                const focusedTab = event.target.closest('[role="tab"]');
+                if (!focusedTab) return;
+                const focusedView = focusedTab.id.replace('tab-', '');
+                const currentIndex = VIEW_ORDER.indexOf(focusedView);
                 if (currentIndex === -1) {
                     return;
                 }
