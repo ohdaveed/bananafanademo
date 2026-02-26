@@ -99,14 +99,12 @@ const { useState, useEffect, useMemo } = React;
                 setCurrentView(view);
                 setVisitedViews((previous) => ({ ...previous, [view]: true }));
                 window.scrollTo({ top: 0, behavior: 'auto' });
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        const targetSection = document.getElementById(sectionId);
-                        if (targetSection) {
-                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    }, 60);
-                });
+                setTimeout(() => {
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 80);
             };
 
             useEffect(() => {
@@ -396,26 +394,32 @@ const { useState, useEffect, useMemo } = React;
                     return;
                 }
 
+                let nextView = null;
+
                 if (event.key === 'ArrowRight') {
                     event.preventDefault();
-                    const nextIndex = (currentIndex + 1) % VIEW_ORDER.length;
-                    changeView(VIEW_ORDER[nextIndex]);
+                    nextView = VIEW_ORDER[(currentIndex + 1) % VIEW_ORDER.length];
                 }
 
                 if (event.key === 'ArrowLeft') {
                     event.preventDefault();
-                    const previousIndex = (currentIndex - 1 + VIEW_ORDER.length) % VIEW_ORDER.length;
-                    changeView(VIEW_ORDER[previousIndex]);
+                    nextView = VIEW_ORDER[(currentIndex - 1 + VIEW_ORDER.length) % VIEW_ORDER.length];
                 }
 
                 if (event.key === 'Home') {
                     event.preventDefault();
-                    changeView(VIEW_ORDER[0]);
+                    nextView = VIEW_ORDER[0];
                 }
 
                 if (event.key === 'End') {
                     event.preventDefault();
-                    changeView(VIEW_ORDER[VIEW_ORDER.length - 1]);
+                    nextView = VIEW_ORDER[VIEW_ORDER.length - 1];
+                }
+
+                if (nextView) {
+                    changeView(nextView);
+                    const nextTabEl = document.getElementById(`tab-${nextView}`);
+                    if (nextTabEl) nextTabEl.focus();
                 }
             };
 
@@ -648,8 +652,10 @@ const { useState, useEffect, useMemo } = React;
             const currentWireframe = wireframes[selectedWireframe];
 
             return (
+                <main id="main-content">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
-                    <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" aria-label="Presentation sections" onKeyDown={handleTabKeyboardNavigation}>
+                    <nav aria-label="Presentation sections">
+                    <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
                         <button
                             type="button"
                             onClick={() => changeView('current')}
@@ -729,6 +735,7 @@ const { useState, useEffect, useMemo } = React;
                             </div>
                         </div>
                     </div>
+                    </nav>
 
                     <a
                         href="index.html"
@@ -944,7 +951,7 @@ const { useState, useEffect, useMemo } = React;
                             role="tabpanel"
                             aria-labelledby="tab-wireframes"
                             hidden={currentView !== 'wireframes'}
-                            className={currentView === 'wireframes' ? 'panel-enter' : ''}
+                            className={`space-y-6 ${currentView === 'wireframes' ? 'panel-enter' : ''}`}
                         >
                             <TakeawayBanner text={TAB_TAKEAWAYS.wireframes} />
                             <TabHeader icon={TAB_HEADERS.wireframes.icon} title={TAB_HEADERS.wireframes.title} description={TAB_HEADERS.wireframes.description} />
@@ -1180,6 +1187,8 @@ const { useState, useEffect, useMemo } = React;
                                                     <div 
                                                         className="h-28 rounded-lg shadow-lg mb-3 border-2 border-gray-300 transition-transform hover:scale-105"
                                                         style={{ backgroundColor: color.hex }}
+                                                        role="img"
+                                                        aria-label={`${color.name} swatch, hex ${color.hex}`}
                                                     ></div>
                                                     <p className="font-semibold text-gray-900 text-sm">{color.name}</p>
                                                     <p className="text-xs text-gray-500 font-mono mb-2">{color.hex}</p>
@@ -1400,6 +1409,7 @@ const { useState, useEffect, useMemo } = React;
                         </div>
                     </div>
                 </div>
+                </main>
             );
         };
 
