@@ -272,6 +272,13 @@ const BananafanaWebsiteShowcase = () => {
         }
     };
 
+    const TAB_BUTTON_CONFIG = [
+        { view: 'current', activeBgClass: 'bg-purple-600', icon: Icons.Globe },
+        { view: 'wireframes', activeBgClass: 'bg-yellow-600', icon: Icons.Layout },
+        { view: 'principles', activeBgClass: 'bg-green-700', icon: Icons.Palette },
+        { view: 'structure', activeBgClass: 'bg-blue-700', icon: Icons.FileText },
+    ];
+
     const PAGE_ICONS = {
         Home: Icons.Globe,
         Programs: Icons.Layout,
@@ -450,6 +457,40 @@ const BananafanaWebsiteShowcase = () => {
             </div>
         </section>
     );
+
+    const TabPanel = ({ viewKey, children }) => {
+        if (!visitedViews[viewKey]) return null;
+        const header = TAB_HEADERS[viewKey];
+        return (
+            <div
+                id={`panel-${viewKey}`}
+                role="tabpanel"
+                aria-labelledby={`tab-${viewKey}`}
+                hidden={currentView !== viewKey}
+                className={`space-y-6 ${currentView === viewKey ? 'panel-enter' : ''}`}
+            >
+                <TakeawayBanner text={TAB_TAKEAWAYS[viewKey]} />
+                <TabHeader icon={header.icon} title={header.title} description={header.description} />
+                {children}
+            </div>
+        );
+    };
+
+    const NextStepCTA = ({ color, message, buttonLabel, targetView }) => {
+        const colorClasses = {
+            indigo: { wrapper: 'bg-indigo-50 border border-indigo-200', title: 'text-xl font-bold text-indigo-950', text: 'text-indigo-900', button: 'bg-indigo-700 hover:bg-indigo-800 px-6 py-3' },
+            amber: { wrapper: 'bg-amber-50 border border-amber-200', title: 'text-lg font-bold text-amber-900', text: 'text-amber-800', button: 'bg-amber-700 hover:bg-amber-800 px-5 py-2' },
+            green: { wrapper: 'bg-green-50 border border-green-200', title: 'text-lg font-bold text-green-900', text: 'text-green-800', button: 'bg-green-700 hover:bg-green-800 px-5 py-2' },
+        };
+        const classes = colorClasses[color];
+        return (
+            <div className={`${classes.wrapper} p-6 rounded-lg text-center`}>
+                <h3 className={`${classes.title} mb-2`}>Next Step</h3>
+                <p className={`${classes.text} mb-4`}>{message}</p>
+                <button type="button" onClick={() => changeView(targetView)} className={`${classes.button} text-white rounded-lg font-semibold transition-all`}>{buttonLabel}</button>
+            </div>
+        );
+    };
 
     const wireframes = useMemo(() => ({
         hero: {
@@ -670,54 +711,21 @@ const BananafanaWebsiteShowcase = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
                 <nav aria-label="Presentation sections">
                     <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
-                        <button
-                            type="button"
-                            onClick={() => changeView('current')}
-                            className={tabButtonClasses('current', 'bg-purple-600')}
-                            role="tab"
-                            aria-selected={currentView === 'current'}
-                            aria-controls="panel-current"
-                            id="tab-current"
-                        >
-                            <Icons.Globe className="inline w-5 h-5 mr-2" />
-                            Current Site
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => changeView('wireframes')}
-                            className={tabButtonClasses('wireframes', 'bg-yellow-600')}
-                            role="tab"
-                            aria-selected={currentView === 'wireframes'}
-                            aria-controls="panel-wireframes"
-                            id="tab-wireframes"
-                        >
-                            <Icons.Layout className="inline w-5 h-5 mr-2" />
-                            Wireframes
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => changeView('principles')}
-                            className={tabButtonClasses('principles', 'bg-green-700')}
-                            role="tab"
-                            aria-selected={currentView === 'principles'}
-                            aria-controls="panel-principles"
-                            id="tab-principles"
-                        >
-                            <Icons.Palette className="inline w-5 h-5 mr-2" />
-                            Design Principles
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => changeView('structure')}
-                            className={tabButtonClasses('structure', 'bg-blue-700')}
-                            role="tab"
-                            aria-selected={currentView === 'structure'}
-                            aria-controls="panel-structure"
-                            id="tab-structure"
-                        >
-                            <Icons.FileText className="inline w-5 h-5 mr-2" />
-                            Site Structure
-                        </button>
+                        {TAB_BUTTON_CONFIG.map(({ view, activeBgClass, icon: TabIcon }) => (
+                            <button
+                                key={view}
+                                type="button"
+                                onClick={() => changeView(view)}
+                                className={tabButtonClasses(view, activeBgClass)}
+                                role="tab"
+                                aria-selected={currentView === view}
+                                aria-controls={`panel-${view}`}
+                                id={`tab-${view}`}
+                            >
+                                <TabIcon className="inline w-5 h-5 mr-2" />
+                                {VIEW_LABELS[view]}
+                            </button>
+                        ))}
                         <div className="w-full mt-2">
                             <div className="max-w-4xl mx-auto bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium text-center">
                                 Now Viewing: {VIEW_LABELS[currentView]} · Section {currentSection} of {VIEW_SECTION_TOTALS[currentView]}
@@ -814,16 +822,7 @@ const BananafanaWebsiteShowcase = () => {
                 </section>
 
                 {/* Current Site View */}
-                {visitedViews.current && (
-                    <div
-                        id="panel-current"
-                        role="tabpanel"
-                        aria-labelledby="tab-current"
-                        hidden={currentView !== 'current'}
-                        className={`space-y-6 ${currentView === 'current' ? 'panel-enter' : ''}`}
-                    >
-                        <TakeawayBanner text={TAB_TAKEAWAYS.current} />
-                        <TabHeader icon={TAB_HEADERS.current.icon} title={TAB_HEADERS.current.title} description={TAB_HEADERS.current.description} />
+                <TabPanel viewKey="current">
                         <div id="current-site-audit" className="bg-white rounded-lg shadow-xl p-5 sm:p-8 border-2 border-purple-200">
                             <div className="flex items-start justify-between mb-6">
                                 <div>
@@ -950,25 +949,11 @@ const BananafanaWebsiteShowcase = () => {
                         </div>
 
                         {/* CTA */}
-                        <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200 text-center">
-                            <h3 className="text-xl font-bold text-indigo-950 mb-2">Next Step</h3>
-                            <p className="text-indigo-900 mb-4">Move to wireframes to see the proposed conversion-first layout and content structure.</p>
-                            <button type="button" onClick={() => changeView('wireframes')} className="bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-800 transition-all">Go to Wireframes</button>
-                        </div>
-                    </div>
-                )}
+                        <NextStepCTA color="indigo" message="Move to wireframes to see the proposed conversion-first layout and content structure." buttonLabel="Go to Wireframes" targetView="wireframes" />
+                </TabPanel>
 
                 {/* Wireframes View */}
-                {visitedViews.wireframes && (
-                    <div
-                        id="panel-wireframes"
-                        role="tabpanel"
-                        aria-labelledby="tab-wireframes"
-                        hidden={currentView !== 'wireframes'}
-                        className={`space-y-6 ${currentView === 'wireframes' ? 'panel-enter' : ''}`}
-                    >
-                        <TakeawayBanner text={TAB_TAKEAWAYS.wireframes} />
-                        <TabHeader icon={TAB_HEADERS.wireframes.icon} title={TAB_HEADERS.wireframes.title} description={TAB_HEADERS.wireframes.description} />
+                <TabPanel viewKey="wireframes">
                         {/* Mobile Toggle */}
                         <div className="flex justify-center my-6">
                             <div className="bg-white p-2 rounded-lg shadow border-2 border-gray-200 inline-flex gap-2">
@@ -1054,25 +1039,11 @@ const BananafanaWebsiteShowcase = () => {
                             </details>
                         </div>
 
-                        <div className="mt-6 bg-amber-50 p-6 rounded-lg border border-amber-200 text-center">
-                            <h3 className="text-lg font-bold text-amber-900 mb-2">Next Step</h3>
-                            <p className="text-amber-800 mb-4">Move to Design Principles to see the research and system decisions behind these layouts.</p>
-                            <button type="button" onClick={() => changeView('principles')} className="bg-amber-700 text-white px-5 py-2 rounded-lg font-semibold hover:bg-amber-800 transition-all">Go to Design Principles</button>
-                        </div>
-                    </div>
-                )}
+                        <NextStepCTA color="amber" message="Move to Design Principles to see the research and system decisions behind these layouts." buttonLabel="Go to Design Principles" targetView="principles" />
+                </TabPanel>
 
                 {/* Design Principles View */}
-                {visitedViews.principles && (
-                    <div
-                        id="panel-principles"
-                        role="tabpanel"
-                        aria-labelledby="tab-principles"
-                        hidden={currentView !== 'principles'}
-                        className={`space-y-6 ${currentView === 'principles' ? 'panel-enter' : ''}`}
-                    >
-                        <TakeawayBanner text={TAB_TAKEAWAYS.principles} />
-                        <TabHeader icon={TAB_HEADERS.principles.icon} title={TAB_HEADERS.principles.title} description={TAB_HEADERS.principles.description} />
+                <TabPanel viewKey="principles">
                         <section id="principles-overview" className="bg-white rounded-lg border-2 border-green-200 p-6 shadow-lg">
                             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Design System Overview</h3>
                             <p className="text-gray-600 mb-5">This section translates strategy into implementation-ready guidance for design and development teams.</p>
@@ -1224,25 +1195,11 @@ const BananafanaWebsiteShowcase = () => {
                             </details>
                         </div>
 
-                        <div className="bg-green-50 p-6 rounded-lg border border-green-200 text-center">
-                            <h3 className="text-lg font-bold text-green-900 mb-2">Next Step</h3>
-                            <p className="text-green-800 mb-4">Continue to Site Structure to connect these design choices to page hierarchy and implementation scope.</p>
-                            <button type="button" onClick={() => changeView('structure')} className="bg-green-700 text-white px-5 py-2 rounded-lg font-semibold hover:bg-green-800 transition-all">Go to Site Structure</button>
-                        </div>
-                    </div>
-                )}
+                        <NextStepCTA color="green" message="Continue to Site Structure to connect these design choices to page hierarchy and implementation scope." buttonLabel="Go to Site Structure" targetView="structure" />
+                </TabPanel>
 
                 {/* Site Structure View */}
-                {visitedViews.structure && (
-                    <div
-                        id="panel-structure"
-                        role="tabpanel"
-                        aria-labelledby="tab-structure"
-                        hidden={currentView !== 'structure'}
-                        className={`space-y-6 ${currentView === 'structure' ? 'panel-enter' : ''}`}
-                    >
-                        <TakeawayBanner text={TAB_TAKEAWAYS.structure} />
-                        <TabHeader icon={TAB_HEADERS.structure.icon} title={TAB_HEADERS.structure.title} description={TAB_HEADERS.structure.description} />
+                <TabPanel viewKey="structure">
                         <div id="structure-architecture" className="bg-gradient-to-r from-blue-600 to-purple-600 p-5 sm:p-8 rounded-lg shadow-xl text-white mb-6">
                             <h2 className="text-2xl sm:text-3xl font-bold mb-4">Site Architecture</h2>
                             <p className="text-blue-100 text-lg">
@@ -1390,8 +1347,7 @@ const BananafanaWebsiteShowcase = () => {
                                 </div>
                             </div>
                         </section>
-                    </div>
-                )}
+                </TabPanel>
 
                 {/* Footer CTA */}
                 <div className="mt-12 bg-gradient-to-r from-yellow-300 via-green-300 to-blue-400 p-5 sm:p-8 rounded-lg shadow-xl border border-blue-200">
