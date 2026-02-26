@@ -1,908 +1,664 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bananafana Preschool - Website Redesign Showcase</title>
-    
-    <!-- Tailwind CSS via CDN -->
+    <title>Bananafana Preschool - Modern Landing Page</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script>
+        window.tailwind = window.tailwind || {};
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Fraunces"', 'serif'],
+                        sans: ['"Work Sans"', 'sans-serif']
+                    },
+                    colors: {
+                        banana: {
+                            50: '#fff7e6',
+                            100: '#ffedbf',
+                            200: '#ffe08f',
+                            300: '#ffd15f',
+                            400: '#ffbf2e',
+                            500: '#f5a800',
+                            600: '#cc8600',
+                            700: '#9b6500',
+                            800: '#6d4700',
+                            900: '#3f2a00'
+                        },
+                        lagoon: {
+                            50: '#edf8f6',
+                            100: '#d4efe8',
+                            200: '#a8dfd2',
+                            300: '#7bcebb',
+                            400: '#48b49f',
+                            500: '#2e9a85',
+                            600: '#1e7b6a',
+                            700: '#175c51',
+                            800: '#103c37',
+                            900: '#0a2320'
+                        },
+                        berry: {
+                            50: '#fff0f6',
+                            100: '#ffd6e7',
+                            200: '#ffadd0',
+                            300: '#ff84b8',
+                            400: '#ff5299',
+                            500: '#e93b7f',
+                            600: '#b92e65',
+                            700: '#89224c',
+                            800: '#5a1632',
+                            900: '#2d0b19'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React and ReactDOM via CDN -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Babel Standalone for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
+
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --surface: #fffdf7;
+            --ink: #1d1a16;
+            --muted: #6f655a;
+            --accent: #2e9a85;
+            --warm: #f5a800;
+            --blush: #ff7aa8;
+        }
+
         body {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-                sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-family: "Work Sans", sans-serif;
+            color: var(--ink);
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #fff7e6, #fffdf7 40%),
+                radial-gradient(circle at 20% 70%, #edf8f6, transparent 50%),
+                radial-gradient(circle at 80% 20%, #fff0f6, transparent 45%);
+        }
+
+        .hero-grid {
+            background-image: linear-gradient(120deg, rgba(255, 209, 95, 0.25), rgba(255, 132, 184, 0.2));
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 1rem;
+            z-index: 1000;
+            background: #ffffff;
+            color: #1d1a16;
+            padding: 0.6rem 1rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .skip-link:focus-visible {
+            top: 1rem;
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 9999px;
+        }
+
+        .glass {
+            backdrop-filter: blur(14px);
+            background: rgba(255, 255, 255, 0.78);
+        }
+
+        .floaty,
+        .floaty-delay {
+            animation-name: floaty;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        .floaty {
+            animation-duration: 7s;
+        }
+
+        .floaty-delay {
+            animation-duration: 8s;
+            animation-delay: 1.5s;
+        }
+
+        .reveal {
+            animation: reveal 0.8s ease-out both;
+        }
+
+        @keyframes floaty {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes reveal {
+            0% {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .floaty,
+            .floaty-delay,
+            .reveal {
+                animation: none !important;
+            }
         }
     </style>
 </head>
+
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        // --- Data ---
+        const PROGRAMS_DATA = [
+            {
+                title: 'Seedlings',
+                ages: '6 weeks - 18 months',
+                description: 'Gentle routines, sensory play, and nurturing connections that feel like home.',
+                tags: ['Spanish songs', 'Daily photo updates', 'Responsive care']
+            },
+            {
+                title: 'Explorers',
+                ages: '18 months - 3 years',
+                description: 'Curiosity-led play with bilingual storytelling and discovery stations.',
+                tags: ['Language immersion', 'Outdoor time', 'Social-emotional']
+            },
+            {
+                title: 'Trailblazers',
+                ages: '3 - 5 years',
+                description: 'Kindergarten readiness with STEAM play, literacy, and early math foundations.',
+                tags: ['Pre-K curriculum', 'Project work', 'Confidence building']
+            }
+        ];
 
-        // Lucide React Icons (simplified inline SVG versions)
-        const Icons = {
-            CheckCircle2: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            ),
-            Circle: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" strokeWidth={2} />
-                </svg>
-            ),
-            AlertCircle: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" strokeWidth={2} />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01" />
-                </svg>
-            ),
-            Lightbulb: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-            ),
-            FileText: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-            ),
-            Users: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-            ),
-            MessageSquare: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-            ),
-            ChevronRight: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-            ),
-            ChevronDown: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-            ),
-            Sparkles: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-            ),
-            Palette: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                </svg>
-            ),
-            Layout: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                </svg>
-            ),
-            Smartphone: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-            ),
-            Globe: ({ className }) => (
-                <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            )
+        const VALUES_DATA = [
+            {
+                title: 'Immersive Spanish Daily',
+                description: 'Children hear and use Spanish organically during play, routines, and music.'
+            },
+            {
+                title: 'Small Classes, Big Care',
+                description: 'Low ratios mean teachers can truly know each child and family.'
+            },
+            {
+                title: 'Nature-Inspired Spaces',
+                description: 'Warm, airy classrooms with open-ended materials and calm sensory zones.'
+            },
+            {
+                title: 'Family Partnership',
+                description: 'Weekly updates, conferences, and a consistent feedback loop for parents.'
+            }
+        ];
+
+        const ADMISSION_STEPS = [
+            'Book a tour online (virtual or in-person).',
+            'Meet our teachers and see a class in action.',
+            'Complete a simple enrollment form.',
+            'Settle in with a gentle first-week transition plan.'
+        ];
+
+        const LOCATIONS_DATA = [
+            {
+                area: 'Mission District',
+                title: 'Sunny courtyard campus',
+                description: 'Bright classrooms, garden play yard, and convenient pick-up parking.',
+                tags: ['8 classrooms', 'Ages 1-5'],
+                accentColor: 'text-berry-600'
+            },
+            {
+                area: 'Ingleside / Oceanview',
+                title: 'Neighborhood rooted',
+                description: 'Cozy, community feel with nature-inspired spaces and spacious indoor play.',
+                tags: ['6 classrooms', 'Ages 6 weeks - 4 years'],
+                accentColor: 'text-lagoon-700'
+            }
+        ];
+
+        const GALLERY_IMAGES = [
+            { src: "https://images.unsplash.com/photo-1497485692312-a26e1cc30f1d?auto=format&fit=crop&w=700&q=80", alt: "Children drawing together" },
+            { src: "https://images.unsplash.com/photo-1535572290543-960a8046f5af?auto=format&fit=crop&w=700&q=80", alt: "Teacher reading to children" },
+            { src: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=700&q=80", alt: "Child painting in class" }
+        ];
+
+        const NAV_LINKS = [
+            { href: '#programs', label: 'Programs' },
+            { href: '#approach', label: 'Approach' },
+            { href: '#locations', label: 'Locations' },
+            { href: '#admissions', label: 'Admissions' },
+            { href: '#gallery', label: 'Gallery' },
+            { href: '#resources', label: 'Resources' }
+        ];
+
+        const HERO_BADGES = [
+            'Licensed by CA DSS',
+            'Open 7:30am - 6:00pm',
+            'Flexible enrollment options'
+        ];
+
+        const SIGNATURE_EXPERIENCES = [
+            'Daily circle time with songs, stories, and movement.',
+            'Outdoor play in our garden-inspired yards.',
+            'Family nights celebrating art, culture, and food.'
+        ];
+
+        const TUITION_INCLUDES = [
+            'Fresh snacks and lunches.',
+            'Weekly enrichment activities.',
+            'Progress reports and parent conferences.'
+        ];
+
+        const RESOURCE_CARDS = [
+            {
+                title: 'Tuition & Enrollment',
+                description: 'Clear monthly tuition bands, sibling discounts, and step-by-step enrollment guidance.',
+                actionLabel: 'Request Tuition Guide',
+                actionHref: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request'
+            },
+            {
+                title: 'Daily Rhythm',
+                description: 'Sample schedules by age group so families can plan routines with confidence.',
+                actionLabel: 'See Daily Schedule',
+                actionHref: '#programs'
+            },
+            {
+                title: 'Family Communication',
+                description: 'Weekly classroom updates, milestone check-ins, and parent-teacher conferences.',
+                actionLabel: 'Contact Admissions',
+                actionHref: 'mailto:hello@bananafana.com?subject=Admissions%20Question'
+            }
+        ];
+
+        const FALLBACK_IMAGE_SRC = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500"><rect width="800" height="500" fill="#f5f5f4"/><text x="400" y="250" text-anchor="middle" dominant-baseline="middle" fill="#78716c" font-family="Arial, sans-serif" font-size="28">Image unavailable</text></svg>'
+        )}`;
+
+        const SECTION_CONTAINER = 'max-w-6xl mx-auto px-6';
+
+        // --- Reusable UI Components ---
+        const ProgramCard = ({ title, ages, description, tags }) => (
+            <div className="bg-white rounded-3xl p-6 shadow-xl border border-banana-100 hover:-translate-y-1 transition-transform">
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-semibold text-lagoon-800">{title}</h3>
+                    <span className="text-xs font-semibold uppercase tracking-wide text-lagoon-700 bg-lagoon-100 px-3 py-1 rounded-full">{ages}</span>
+                </div>
+                <p className="text-sm text-stone-600 mb-4">{description}</p>
+                <div className="flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                        <span key={tag} className="text-xs font-medium text-stone-700 bg-stone-100 px-3 py-1 rounded-full">{tag}</span>
+                    ))}
+                </div>
+            </div>
+        );
+
+        const ValueCard = ({ title, description }) => (
+            <div className="bg-white rounded-2xl p-5 shadow-lg border border-stone-100">
+                <h4 className="text-lg font-semibold text-stone-900 mb-2">{title}</h4>
+                <p className="text-sm text-stone-600">{description}</p>
+            </div>
+        );
+
+        const LocationCard = ({ area, title, description, tags, accentColor }) => (
+            <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-stone-100">
+                <p className={`text-sm uppercase tracking-[0.4em] ${accentColor}`}>{area}</p>
+                <h3 className="font-display text-2xl text-stone-900 mt-2 mb-4">{title}</h3>
+                <p className="text-sm text-stone-600 mb-6">{description}</p>
+                <div className="flex items-center gap-3 text-sm text-stone-500">
+                    {tags.map(tag => <span key={tag} className="bg-stone-100 px-3 py-1 rounded-full">{tag}</span>)}
+                </div>
+            </div>
+        );
+
+        const SectionHeading = ({ headingId, eyebrowClass, eyebrow, title, description }) => (
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8 md:mb-10">
+                <div>
+                    <p className={`text-sm uppercase tracking-[0.4em] ${eyebrowClass}`}>{eyebrow}</p>
+                    <h2 id={headingId} className="font-display text-3xl md:text-4xl text-stone-900">{title}</h2>
+                </div>
+                {description ? <p className="text-base text-stone-600 max-w-md">{description}</p> : null}
+            </div>
+        );
+
+        const FeatureListCard = ({ title, items, className }) => (
+            <div className={className}>
+                <p className="text-sm text-stone-600">{title}</p>
+                <ul className="mt-3 space-y-3 text-sm text-stone-700">
+                    {items.map((item) => (
+                        <li key={item}>{item}</li>
+                    ))}
+                </ul>
+            </div>
+        );
+
+        const handleImageError = (event) => {
+            const image = event.currentTarget;
+            if (image.dataset.fallbackApplied === 'true') {
+                return;
+            }
+            image.dataset.fallbackApplied = 'true';
+            image.src = FALLBACK_IMAGE_SRC;
+            image.alt = `${image.alt} (fallback image shown)`;
         };
 
-        const BananafanaWebsiteShowcase = () => {
-            const [currentView, setCurrentView] = useState('wireframes');
-            const [selectedWireframe, setSelectedWireframe] = useState('hero');
-            const [showMobile, setShowMobile] = useState(false);
-            const [selectedPalette, setSelectedPalette] = useState('nurturing');
-
-            const colorPalettes = {
-                nurturing: {
-                    name: 'Nurturing Nature',
-                    description: 'Calm, growth-focused palette for gentle learning',
-                    mood: 'Serene, Trustworthy, Safe',
-                    bestFor: 'Traditional preschools, parent-focused marketing',
-                    colors: {
-                        primary: { hex: '#6BCB77', name: 'Nurturing Green', role: 'Primary - Calm & Growth', benefit: 'Stress relief, concentration' },
-                        secondary: { hex: '#4D96FF', name: 'Trust Blue', role: 'Secondary - Focus', benefit: 'Reduces anxiety, creativity' },
-                        accent1: { hex: '#FFD93D', name: 'Attention Yellow', role: 'Accent - Energy', benefit: 'Captures attention' },
-                        accent2: { hex: '#FF9A3C', name: 'Playful Orange', role: 'Accent - Warmth', benefit: 'Excitement (use sparingly)' },
-                        neutral: { hex: '#F8F9FA', name: 'Soft Neutral', role: 'Background', benefit: 'Prevents overwhelm' }
-                    },
-                    distribution: '60% Green/Blue | 30% Neutrals | 10% Yellow/Orange'
-                },
-                ocean: {
-                    name: 'Ocean Adventure',
-                    description: 'Cool, calming blues for focus and tranquility',
-                    mood: 'Peaceful, Focused, Professional',
-                    bestFor: 'Academic-focused preschools, STEM programs',
-                    colors: {
-                        primary: { hex: '#0077B6', name: 'Deep Ocean Blue', role: 'Primary - Trust', benefit: 'Deep focus, credibility' },
-                        secondary: { hex: '#00B4D8', name: 'Sky Blue', role: 'Secondary - Calm', benefit: 'Reduces anxiety' },
-                        accent1: { hex: '#90E0EF', name: 'Light Aqua', role: 'Accent - Freshness', benefit: 'Serene atmosphere' },
-                        accent2: { hex: '#48CAE4', name: 'Bright Teal', role: 'Accent - Energy', benefit: 'Gentle stimulation' },
-                        neutral: { hex: '#F7F9FB', name: 'Cloud White', role: 'Background', benefit: 'Clean, clear' }
-                    },
-                    distribution: '60% Blues | 30% Neutrals | 10% Aqua accents'
-                },
-                sunshine: {
-                    name: 'Sunshine Meadow',
-                    description: 'Bright, energetic palette for active learning',
-                    mood: 'Joyful, Energetic, Optimistic',
-                    bestFor: 'Play-based learning, creative programs',
-                    colors: {
-                        primary: { hex: '#FFD93D', name: 'Sunshine Yellow', role: 'Primary - Joy', benefit: 'Captures attention, uplifting' },
-                        secondary: { hex: '#6BCB77', name: 'Fresh Green', role: 'Secondary - Balance', benefit: 'Balances energy with calm' },
-                        accent1: { hex: '#FF9A3C', name: 'Warm Orange', role: 'Accent - Enthusiasm', benefit: 'Energy boost' },
-                        accent2: { hex: '#4D96FF', name: 'Sky Blue', role: 'Accent - Calm', benefit: 'Prevents overstimulation' },
-                        neutral: { hex: '#FFFBF0', name: 'Cream', role: 'Background', benefit: 'Warm, welcoming' }
-                    },
-                    distribution: '60% Yellow/Green | 30% Cream | 10% Orange/Blue'
-                },
-                forest: {
-                    name: 'Forest Friends',
-                    description: 'Earthy, natural tones for grounded learning',
-                    mood: 'Natural, Grounded, Harmonious',
-                    bestFor: 'Nature-based programs, outdoor education',
-                    colors: {
-                        primary: { hex: '#4A7C59', name: 'Forest Green', role: 'Primary - Nature', benefit: 'Grounding, stress relief' },
-                        secondary: { hex: '#8BAA91', name: 'Sage Green', role: 'Secondary - Harmony', benefit: 'Mental health, calm' },
-                        accent1: { hex: '#F4A261', name: 'Autumn Gold', role: 'Accent - Warmth', benefit: 'Inviting, cozy' },
-                        accent2: { hex: '#E9C46A', name: 'Honey Yellow', role: 'Accent - Light', benefit: 'Gentle attention' },
-                        neutral: { hex: '#F8F5F0', name: 'Natural Linen', role: 'Background', benefit: 'Organic feel' }
-                    },
-                    distribution: '60% Greens | 30% Naturals | 10% Gold/Yellow'
-                },
-                rainbow: {
-                    name: 'Rainbow Dreams',
-                    description: 'Balanced multi-color palette for diverse learning',
-                    mood: 'Inclusive, Creative, Vibrant',
-                    bestFor: 'Diverse programs, multi-age facilities',
-                    colors: {
-                        primary: { hex: '#6BCB77', name: 'Growth Green', role: 'Primary - Base', benefit: 'Calm foundation' },
-                        secondary: { hex: '#4D96FF', name: 'Trust Blue', role: 'Secondary - Focus', benefit: 'Concentration' },
-                        accent1: { hex: '#FFD93D', name: 'Joy Yellow', role: 'Accent - Energy', benefit: 'Attention' },
-                        accent2: { hex: '#FF6B9D', name: 'Gentle Pink', role: 'Accent - Warmth', benefit: 'Nurturing, care' },
-                        neutral: { hex: '#FAFAFA', name: 'Pure White', role: 'Background', benefit: 'Lets colors shine' }
-                    },
-                    distribution: '60% Green/Blue | 30% White | 10% Yellow/Pink rotation'
-                },
-                pastel: {
-                    name: 'Soft Pastels',
-                    description: 'Gentle, soothing tones for sensitive environments',
-                    mood: 'Gentle, Soothing, Delicate',
-                    bestFor: 'Infant/toddler programs, sensory-sensitive children',
-                    colors: {
-                        primary: { hex: '#B8E2F2', name: 'Baby Blue', role: 'Primary - Calm', benefit: 'Maximum serenity' },
-                        secondary: { hex: '#D4F1D4', name: 'Soft Mint', role: 'Secondary - Peace', benefit: 'Gentle nurturing' },
-                        accent1: { hex: '#FFF4B8', name: 'Cream Yellow', role: 'Accent - Subtle', benefit: 'Soft attention' },
-                        accent2: { hex: '#FFD1DC', name: 'Blush Pink', role: 'Accent - Warmth', benefit: 'Comfort, care' },
-                        neutral: { hex: '#FCFCFC', name: 'Almost White', role: 'Background', benefit: 'Ultra-clean' }
-                    },
-                    distribution: '70% Pastels | 20% White | 10% Subtle accents'
-                }
-            };
-
-            const currentPalette = colorPalettes[selectedPalette];
-
-            const wireframes = {
-                hero: {
-                    title: 'Hero Section - Warm Welcome',
-                    description: 'First impression that builds trust with parents',
-                    elements: [
-                        'Large, bright photo of children playing',
-                        'Clear headline: "Where Little Minds Grow Big"',
-                        'Prominent CTA: "Schedule a Tour" + "Enroll Now"',
-                        'Trust indicators: License info, years established',
-                        'Contact info immediately visible'
-                    ],
-                    colorScheme: 'Green (calm/trust) + Blue accents + Yellow CTAs',
-                    mockup: `╔════════════════════════════════════════════════════╗
-║  🍌 Bananafana Preschool        ☎️ 📧 📍 Tour  ║
-╠════════════════════════════════════════════════════╣
-║                                                    ║
-║     [Hero Image: Happy Children Playing]          ║
-║                                                    ║
-║     WHERE LITTLE MINDS GROW BIG                    ║
-║     Nurturing curiosity since 2010                 ║
-║                                                    ║
-║     [Schedule a Tour]  [Enroll Now]               ║
-║                                                    ║
-║     ⭐ Licensed by CA Dept of Social Services     ║
-║                                                    ║
-╚════════════════════════════════════════════════════╝`
-                },
-                programs: {
-                    title: 'Programs Overview',
-                    description: 'Clear age groups and curriculum highlights',
-                    elements: [
-                        'Age-based program cards (Infant, Toddler, Preschool)',
-                        'Daily schedule previews',
-                        'Key learning areas icons',
-                        'Age-appropriate photos for each program',
-                        'Quick comparison table'
-                    ],
-                    colorScheme: 'Color-coded: Green (infants-calm), Blue (toddlers-focus), Yellow accents (preschool-energy)',
-                    mockup: `╔════════════════════════════════════════════════════╗
-║              OUR PROGRAMS                          ║
-╠══════════════╦══════════════╦══════════════════════╣
-║  INFANTS     ║  TODDLERS    ║  PRESCHOOL          ║
-║  (6wks-18mo) ║  (18mo-3yr)  ║  (3-5 years)        ║
-╠══════════════╬══════════════╬══════════════════════╣
-║  [Photo]     ║  [Photo]     ║  [Photo]            ║
-║              ║              ║                      ║
-║  • Gentle    ║  • Active    ║  • Kindergarten     ║
-║    routines  ║    learning  ║    prep             ║
-║  • Sensory   ║  • Language  ║  • STEAM            ║
-║    play      ║    building  ║    activities       ║
-║  • Safe      ║  • Social    ║  • Reading          ║
-║    exploration║   skills    ║    readiness        ║
-║              ║              ║                      ║
-║  [Learn More]║ [Learn More] ║  [Learn More]       ║
-╚══════════════╩══════════════╩══════════════════════╝`
-                },
-                tour: {
-                    title: 'Tour Scheduling - Frictionless',
-                    description: 'Make it dead simple to book a tour',
-                    elements: [
-                        'Embedded calendar widget (Calendly-style)',
-                        'Available time slots clearly visible',
-                        'Virtual tour option prominently displayed',
-                        'Photo gallery of facilities',
-                        'What to expect during tour (bullet points)'
-                    ],
-                    colorScheme: 'Blue (trust-building) with Yellow CTA buttons (attention-grabbing)',
-                    mockup: `╔════════════════════════════════════════════════════╗
-║         SCHEDULE YOUR VISIT                        ║
-╠════════════════════════════════════════════════════╣
-║                                                    ║
-║  Choose Your Tour Type:                            ║
-║  ○ In-Person Tour    ○ Virtual Tour               ║
-║                                                    ║
-║  ┌──────────────────┐  ┌────────────────────┐    ║
-║  │   CALENDAR       │  │  WHAT TO EXPECT:   │    ║
-║  │                  │  │                    │    ║
-║  │  March 2025      │  │  ✓ Meet teachers   │    ║
-║  │  M  T  W  T  F   │  │  ✓ See classrooms  │    ║
-║  │     1  2  3  4   │  │  ✓ Ask questions   │    ║
-║  │  7 [8] 9 10 11   │  │  ✓ Review schedule │    ║
-║  │  14 15 16 17 18  │  │  ✓ ~30 minutes     │    ║
-║  │                  │  │                    │    ║
-║  └──────────────────┘  └────────────────────┘    ║
-║                                                    ║
-║  Available Times for March 8:                      ║
-║  [9:00 AM] [10:30 AM] [2:00 PM] [4:00 PM]        ║
-║                                                    ║
-╚════════════════════════════════════════════════════╝`
-                },
-                trust: {
-                    title: 'Trust & Safety Section',
-                    description: 'Address parent concerns proactively',
-                    elements: [
-                        'Licensing & certifications (badges)',
-                        'Staff credentials & background checks',
-                        'Safety protocols & security measures',
-                        'Parent testimonials with photos',
-                        'Health & nutrition information'
-                    ],
-                    colorScheme: 'Professional Blue (calming + credible) + Green (health/nurturing)',
-                    mockup: `╔════════════════════════════════════════════════════╗
-║         YOUR CHILD'S SAFETY IS OUR PRIORITY       ║
-╠════════════════════════════════════════════════════╣
-║                                                    ║
-║  🎓 Credentials              🔒 Security           ║
-║  • CA Licensed Facility      • Secure entry        ║
-║  • CPR/First Aid Certified   • Visitor check-in    ║
-║  • Background checked staff  • Camera monitoring   ║
-║                                                    ║
-║  🍎 Nutrition                👨‍👩‍👧‍👦 Testimonials      ║
-║  • Organic snacks            "Our daughter has     ║
-║  • Allergy accommodations    blossomed here!"      ║
-║  • Nutritionist approved     - Sarah M., Parent    ║
-║                                                    ║
-║  [View Full Credentials]  [Read More Reviews]     ║
-║                                                    ║
-╚════════════════════════════════════════════════════╝`
-                },
-                contact: {
-                    title: 'Contact & Footer',
-                    description: 'Multiple ways to connect',
-                    elements: [
-                        'Contact form with specific inquiry types',
-                        'Google Maps integration',
-                        'Hours of operation',
-                        'Social media links',
-                        'FAQ quick links'
-                    ],
-                    colorScheme: 'Soft neutrals (#F8F9FA) to prevent overwhelm + Green/Blue brand accents',
-                    mockup: `╔════════════════════════════════════════════════════╗
-║              GET IN TOUCH                          ║
-╠════════════════════════════════════════════════════╣
-║  ┌──────────────────┐  ┌────────────────────┐    ║
-║  │  CONTACT FORM    │  │   FIND US          │    ║
-║  │                  │  │                    │    ║
-║  │  Name: [____]    │  │  [Google Map]      │    ║
-║  │  Email: [____]   │  │                    │    ║
-║  │  Phone: [____]   │  │  123 Main St       │    ║
-║  │  I'm interested  │  │  San Francisco, CA │    ║
-║  │  in: [Dropdown]  │  │                    │    ║
-║  │  Message: [____] │  │  Hours:            │    ║
-║  │  [Send Message]  │  │  M-F: 7am-6pm      │    ║
-║  │                  │  │                    │    ║
-║  └──────────────────┘  └────────────────────┘    ║
-║                                                    ║
-║  Quick Links: FAQ | Enrollment | Tuition | Blog   ║
-║  📱 Facebook | Instagram | 📧 Newsletter         ║
-╚════════════════════════════════════════════════════╝`
-                }
-            };
-
-            const designPrinciples = [
-                {
-                    icon: 'Palette',
-                    title: 'Evidence-Based Color Psychology',
-                    description: 'Green and blue create calm, focused environments. Yellow/orange accents capture attention without overstimulation',
-                    example: 'Green (#6BCB77) primary for stress relief + concentration | Blue (#4D96FF) for trust + creativity | Yellow (#FFD93D) CTAs only - research shows too much causes distraction'
-                },
-                {
-                    icon: 'Layout',
-                    title: 'Clean, Spacious Layout',
-                    description: 'Plenty of white space, easy-to-scan sections, clear hierarchy',
-                    example: 'Max-width containers, generous padding, clear section breaks'
-                },
-                {
-                    icon: 'Smartphone',
-                    title: 'Mobile-First Design',
-                    description: 'Parents browse on phones - touch-friendly, fast loading',
-                    example: 'Large tap targets, optimized images, responsive grid'
-                },
-                {
-                    icon: 'Globe',
-                    title: 'Trust-Building Elements',
-                    description: 'Credentials, testimonials, real photos prominently displayed',
-                    example: 'License badges, parent reviews, staff photos'
-                }
-            ];
-
-            const keyPages = [
-                {
-                    name: 'Home',
-                    priority: 'Critical',
-                    goal: 'Convert visitors to tour bookings',
-                    sections: ['Hero', 'Programs Overview', 'Why Choose Us', 'Testimonials', 'Schedule Tour CTA']
-                },
-                {
-                    name: 'Programs',
-                    priority: 'Critical',
-                    goal: 'Explain age-appropriate curriculum',
-                    sections: ['Age Groups', 'Daily Schedules', 'Learning Philosophy', 'Tuition']
-                },
-                {
-                    name: 'Enroll',
-                    priority: 'Critical',
-                    goal: 'Clear enrollment process',
-                    sections: ['Requirements', 'Process Steps', 'Forms Download', 'Tuition & Fees', 'Start Form']
-                },
-                {
-                    name: 'About',
-                    priority: 'Important',
-                    goal: 'Build trust and credibility',
-                    sections: ['Our Story', 'Meet the Team', 'Credentials', 'Philosophy', 'Safety']
-                },
-                {
-                    name: 'Contact',
-                    priority: 'Important',
-                    goal: 'Make it easy to reach you',
-                    sections: ['Contact Form', 'Map', 'Hours', 'FAQ Links']
-                }
-            ];
-
-            const currentWireframe = wireframes[selectedWireframe];
-            const Icon = Icons[designPrinciples.find(p => p.icon)?.icon] || Icons.Palette;
-
-            return (
-                <div className="max-w-7xl mx-auto p-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
-                    <div className="text-center mb-12">
-                        <div className="flex items-center justify-center gap-3 mb-4">
-                            <span className="text-5xl">🍌</span>
-                            <h1 className="text-4xl font-bold text-gray-900">Bananafana Preschool</h1>
-                        </div>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-2">
-                            Website Redesign Concepts & Wireframes
-                        </p>
-                        <p className="text-lg text-gray-500">
-                            Modern, trust-building design for parent conversions
-                        </p>
+        // --- Layout Sections ---
+        const Header = ({ isFirstDemoView, onToggleFirstDemoView }) => (
+            <header className="max-w-6xl mx-auto px-6 py-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-banana-400 via-banana-300 to-berry-300 flex items-center justify-center text-white font-bold text-xl">
+                        BF
                     </div>
-
-                    {/* View Toggle */}
-                    <div className="flex justify-center gap-4 mb-8 flex-wrap">
-                        <button
-                            onClick={() => setCurrentView('current')}
-                            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                                currentView === 'current'
-                                    ? 'bg-purple-500 text-white shadow-lg'
-                                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-purple-400'
-                            }`}
-                        >
-                            <Icons.Globe className="inline w-5 h-5 mr-2" />
-                            Current Site
-                        </button>
-                        <button
-                            onClick={() => setCurrentView('wireframes')}
-                            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                                currentView === 'wireframes'
-                                    ? 'bg-yellow-500 text-white shadow-lg'
-                                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-yellow-400'
-                            }`}
-                        >
-                            <Icons.Layout className="inline w-5 h-5 mr-2" />
-                            Wireframes
-                        </button>
-                        <button
-                            onClick={() => setCurrentView('principles')}
-                            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                                currentView === 'principles'
-                                    ? 'bg-green-500 text-white shadow-lg'
-                                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-green-400'
-                            }`}
-                        >
-                            <Icons.Palette className="inline w-5 h-5 mr-2" />
-                            Design Principles
-                        </button>
-                        <button
-                            onClick={() => setCurrentView('structure')}
-                            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                                currentView === 'structure'
-                                    ? 'bg-blue-500 text-white shadow-lg'
-                                    : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-blue-400'
-                            }`}
-                        >
-                            <Icons.FileText className="inline w-5 h-5 mr-2" />
-                            Site Structure
-                        </button>
+                    <div>
+                        <p className="font-display text-2xl text-stone-900">Bananafana Preschool</p>
+                        <p className="text-xs uppercase tracking-[0.3em] text-stone-500">San Francisco</p>
                     </div>
+                </div>
+                <nav aria-label="Primary" className="flex flex-wrap gap-4 text-sm font-semibold text-stone-600">
+                    {NAV_LINKS.map((link) => (
+                        <a key={link.href} className="hover:text-stone-900" href={link.href}>{link.label}</a>
+                    ))}
+                </nav>
+                <div className="flex flex-wrap gap-3">
+                    <a href="#admissions" aria-label="Schedule a tour" className="bg-lagoon-600 text-white px-5 py-3 rounded-full text-sm font-semibold shadow-lg hover:bg-lagoon-700 transition">Schedule a Tour</a>
+                    <button
+                        type="button"
+                        aria-label="Toggle first demo view"
+                        aria-pressed={isFirstDemoView}
+                        onClick={onToggleFirstDemoView}
+                        className="bg-white border border-stone-300 text-stone-700 px-5 py-3 rounded-full text-sm font-semibold shadow-lg hover:border-stone-400 transition"
+                    >
+                        {isFirstDemoView ? 'Show Current' : 'Show First Demo'}
+                    </button>
+                </div>
+            </header>
+        );
 
-                    {/* Current Site View */}
-                    {currentView === 'current' && (
-                        <div className="space-y-6">
-                            <div className="bg-white rounded-lg shadow-xl p-8 border-2 border-purple-200">
-                                <div className="flex items-start justify-between mb-6">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                                            Current Bananafana Preschool Site
-                                        </h2>
-                                        <p className="text-lg text-gray-600">Digital Door walkthrough analysis</p>
-                                    </div>
-                                    <div className="bg-purple-100 px-4 py-2 rounded-lg border-2 border-purple-400">
-                                        <p className="text-sm font-semibold text-purple-900">BEFORE</p>
-                                    </div>
-                                </div>
-
-                                {/* Video Placeholder */}
-                                <div className="bg-gradient-to-br from-yellow-100 via-green-100 to-blue-100 rounded-lg overflow-hidden shadow-2xl mb-6 p-16 text-center border-4 border-dashed border-gray-300">
-                                    <div className="mb-6">
-                                        <span className="text-8xl">🎥</span>
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                                        Bananafana Digital Door Video
-                                    </h3>
-                                    <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                                        Interactive walkthrough of the current site featuring playful banana branding, 
-                                        hand-drawn illustrations, and child-friendly design elements
-                                    </p>
-                                    <div className="bg-white p-6 rounded-lg inline-block">
-                                        <p className="text-sm text-gray-700 mb-3">
-                                            <strong>Video available in full presentation package</strong>
-                                        </p>
-                                        <p className="text-xs text-gray-500">
-                                            Contact for complete video walkthrough and site analysis
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Analysis Grid */}
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <div className="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
-                                        <h3 className="font-bold text-purple-900 mb-3 flex items-center gap-2">
-                                            <Icons.Sparkles className="w-5 h-5" />
-                                            What's Working
-                                        </h3>
-                                        <ul className="space-y-2 text-sm text-gray-700">
-                                            <li className="flex items-start gap-2">
-                                                <Icons.CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                                                <span>Playful, child-friendly imagery (banana, tree, building blocks)</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <Icons.CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                                                <span>Shows children and learning elements</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <Icons.CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                                                <span>Hand-drawn aesthetic feels warm and approachable</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <Icons.CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                                                <span>Digital door concept is engaging and modern</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
-                                        <h3 className="font-bold text-yellow-900 mb-3 flex items-center gap-2">
-                                            <Icons.AlertCircle className="w-5 h-5" />
-                                            Opportunities for Improvement
-                                        </h3>
-                                        <ul className="space-y-2 text-sm text-gray-700">
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-yellow-600 font-bold mt-0.5">→</span>
-                                                <span>Needs clear CTAs (Schedule Tour, Enroll Now)</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-yellow-600 font-bold mt-0.5">→</span>
-                                                <span>Missing trust elements (licensing, credentials)</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-yellow-600 font-bold mt-0.5">→</span>
-                                                <span>Could benefit from consistent color psychology</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-yellow-600 font-bold mt-0.5">→</span>
-                                                <span>Navigation and site structure not immediately clear</span>
-                                            </li>
-                                            <li className="flex items-start gap-2">
-                                                <span className="text-yellow-600 font-bold mt-0.5">→</span>
-                                                <span>Mobile responsiveness and accessibility optimizations needed</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                {/* Design Evolution */}
-                                <div className="mt-6 bg-gradient-to-r from-purple-100 to-blue-100 p-6 rounded-lg border-2 border-purple-300">
-                                    <h3 className="font-bold text-gray-900 mb-4 text-lg">📊 Design Evolution Strategy</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div className="bg-white p-4 rounded-lg">
-                                            <p className="font-semibold text-purple-900 mb-2">Keep & Enhance</p>
-                                            <p className="text-xs text-gray-600">Playful banana branding, child-friendly imagery, warm aesthetic</p>
-                                        </div>
-                                        <div className="bg-white p-4 rounded-lg">
-                                            <p className="font-semibold text-green-900 mb-2">Add & Optimize</p>
-                                            <p className="text-xs text-gray-600">Trust badges, clear CTAs, parent testimonials, mobile-first layout</p>
-                                        </div>
-                                        <div className="bg-white p-4 rounded-lg">
-                                            <p className="font-semibold text-blue-900 mb-2">Modernize</p>
-                                            <p className="text-xs text-gray-600">Research-backed color palette, conversion optimization, accessibility</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* CTA */}
-                            <div className="bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 p-8 rounded-lg shadow-xl text-center">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-3">Ready to See the Redesigned Concepts?</h3>
-                                <p className="text-gray-800 mb-6">Explore modern wireframes with research-backed design principles</p>
-                                <div className="flex justify-center gap-4 flex-wrap">
-                                    <button
-                                        onClick={() => setCurrentView('wireframes')}
-                                        className="bg-white text-gray-900 px-8 py-4 rounded-lg font-bold hover:shadow-xl transition-all"
-                                    >
-                                        View Wireframes →
-                                    </button>
-                                    <button
-                                        onClick={() => setCurrentView('principles')}
-                                        className="bg-gray-900 text-white px-8 py-4 rounded-lg font-bold hover:shadow-xl transition-all"
-                                    >
-                                        Color Palettes →
-                                    </button>
-                                </div>
-                            </div>
+        const HeroSection = () => (
+            <section aria-labelledby="hero-heading" className="hero-grid">
+                <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+                    <div className="space-y-6 reveal">
+                        <p className="text-sm uppercase tracking-[0.4em] text-lagoon-700">Spanish immersion preschool</p>
+                        <h1 id="hero-heading" className="font-display text-4xl md:text-5xl leading-tight text-stone-900">
+                            Where little voices bloom in Spanish, confidence, and care.
+                        </h1>
+                        <p className="text-base md:text-lg text-stone-600 max-w-xl">
+                            A warm, bilingual environment for families seeking an inspiring early childhood experience in San Francisco. Two beautiful campuses, flexible schedules, and nurturing educators.
+                        </p>
+                        <div className="flex flex-wrap gap-4">
+                            <a href="#admissions" aria-label="Book a tour" className="bg-banana-500 text-stone-900 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-banana-400 transition">Book a Tour</a>
+                            <a href="#programs" aria-label="View programs" className="bg-white/80 border border-stone-200 px-6 py-3 rounded-full font-semibold text-stone-700 hover:border-lagoon-400 transition">View Programs</a>
                         </div>
-                    )}
-
-                    {/* Wireframes View */}
-                    {currentView === 'wireframes' && (
-                        <div>
-                            {/* Mobile Toggle */}
-                            <div className="flex justify-center mb-6">
-                                <div className="bg-white p-2 rounded-lg shadow border-2 border-gray-200 inline-flex gap-2">
-                                    <button
-                                        onClick={() => setShowMobile(false)}
-                                        className={`px-4 py-2 rounded flex items-center gap-2 ${
-                                            !showMobile ? 'bg-blue-100 text-blue-700 font-semibold' : 'text-gray-600'
-                                        }`}
-                                    >
-                                        <Icons.Globe className="w-4 h-4" />
-                                        Desktop
-                                    </button>
-                                    <button
-                                        onClick={() => setShowMobile(true)}
-                                        className={`px-4 py-2 rounded flex items-center gap-2 ${
-                                            showMobile ? 'bg-blue-100 text-blue-700 font-semibold' : 'text-gray-600'
-                                        }`}
-                                    >
-                                        <Icons.Smartphone className="w-4 h-4" />
-                                        Mobile
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Section Selector */}
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
-                                {Object.keys(wireframes).map((key) => (
-                                    <button
-                                        key={key}
-                                        onClick={() => setSelectedWireframe(key)}
-                                        className={`p-4 rounded-lg font-semibold transition-all ${
-                                            selectedWireframe === key
-                                                ? 'bg-gradient-to-r from-yellow-400 to-green-400 text-white shadow-lg'
-                                                : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-yellow-400'
-                                        }`}
-                                    >
-                                        {wireframes[key].title.split(' - ')[0]}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Wireframe Display */}
-                            <div className="bg-white rounded-lg shadow-xl p-8 border-2 border-gray-200">
-                                <div className="flex flex-col md:flex-row items-start justify-between mb-6 gap-4">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                                            {currentWireframe.title}
-                                        </h2>
-                                        <p className="text-lg text-gray-600">{currentWireframe.description}</p>
-                                    </div>
-                                    <div className="bg-yellow-100 px-4 py-2 rounded-lg border-2 border-yellow-400 text-sm">
-                                        <p className="font-semibold text-yellow-900">
-                                            {currentWireframe.colorScheme}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* ASCII Wireframe */}
-                                <div className={`bg-gray-50 p-6 rounded-lg border-2 border-gray-300 mb-6 overflow-x-auto ${
-                                    showMobile ? 'max-w-md mx-auto' : ''
-                                }`}>
-                                    <pre className="text-xs md:text-sm font-mono text-gray-700 whitespace-pre">
-                                        {currentWireframe.mockup}
-                                    </pre>
-                                </div>
-
-                                {/* Key Elements */}
-                                <div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-4">Key Elements:</h3>
-                                    <div className="grid md:grid-cols-2 gap-3">
-                                        {currentWireframe.elements.map((element, idx) => (
-                                            <div key={idx} className="flex items-start gap-3 bg-green-50 p-4 rounded-lg border border-green-200">
-                                                <Icons.CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                                                <span className="text-gray-700">{element}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Design Principles View */}
-                    {currentView === 'principles' && (
-                        <div className="space-y-6">
-                            {designPrinciples.map((principle, idx) => {
-                                const PrincipleIcon = Icons[principle.icon];
-                                return (
-                                    <div key={idx} className="bg-white rounded-lg shadow-xl p-8 border-2 border-gray-200">
-                                        <div className="flex flex-col md:flex-row items-start gap-6">
-                                            <div className="bg-green-100 p-4 rounded-lg">
-                                                <PrincipleIcon className="w-8 h-8 text-green-600" />
-                                            </div>
-                                            <div className="flex-1">
-                                                <h3 className="text-2xl font-bold text-gray-900 mb-3">{principle.title}</h3>
-                                                <p className="text-lg text-gray-600 mb-4">{principle.description}</p>
-                                                <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-green-500">
-                                                    <p className="text-sm font-semibold text-gray-700 mb-1">Example:</p>
-                                                    <p className="text-gray-600 text-sm">{principle.example}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-
-                            {/* Color Palette Selector */}
-                            <div className="bg-white rounded-lg shadow-xl p-8 border-2 border-gray-200">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">Choose Your Color Palette</h3>
-                                <p className="text-gray-600 mb-6">Select from research-backed preschool color schemes</p>
-                                
-                                {/* Palette Selector Tabs */}
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-                                    {Object.entries(colorPalettes).map(([key, palette]) => (
-                                        <button
-                                            key={key}
-                                            onClick={() => setSelectedPalette(key)}
-                                            className={`p-4 rounded-lg transition-all text-left ${
-                                                selectedPalette === key
-                                                    ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg scale-105'
-                                                    : 'bg-gray-50 border-2 border-gray-200 hover:border-green-400'
-                                            }`}
-                                        >
-                                            <p className={`font-bold mb-1 ${selectedPalette === key ? 'text-white' : 'text-gray-900'}`}>
-                                                {palette.name}
-                                            </p>
-                                            <p className={`text-xs ${selectedPalette === key ? 'text-green-100' : 'text-gray-500'}`}>
-                                                {palette.mood}
-                                            </p>
-                                        </button>
-                                    ))}
-                                </div>
-
-                                {/* Selected Palette Display */}
-                                <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-lg border-2 border-blue-200 mb-6">
-                                    <div className="flex flex-col lg:flex-row items-start justify-between mb-4 gap-4">
-                                        <div className="flex-1">
-                                            <h4 className="text-2xl font-bold text-gray-900 mb-2">{currentPalette.name}</h4>
-                                            <p className="text-gray-700 mb-2">{currentPalette.description}</p>
-                                            <div className="flex flex-wrap items-center gap-2 text-sm">
-                                                <span className="bg-blue-100 px-3 py-1 rounded-full text-blue-800 font-medium">
-                                                    Mood: {currentPalette.mood}
-                                                </span>
-                                                <span className="bg-green-100 px-3 py-1 rounded-full text-green-800 font-medium">
-                                                    {currentPalette.distribution}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="bg-white px-4 py-2 rounded-lg border-2 border-green-400 text-sm">
-                                            <p className="font-semibold text-green-900">Best For:</p>
-                                            <p className="text-gray-700">{currentPalette.bestFor}</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Color Swatches */}
-                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
-                                        {Object.entries(currentPalette.colors).map(([key, color]) => (
-                                            <div key={key} className="text-center">
-                                                <div 
-                                                    className="h-28 rounded-lg shadow-lg mb-3 border-2 border-gray-300 transition-transform hover:scale-105"
-                                                    style={{ backgroundColor: color.hex }}
-                                                ></div>
-                                                <p className="font-semibold text-gray-900 text-sm">{color.name}</p>
-                                                <p className="text-xs text-gray-500 font-mono mb-2">{color.hex}</p>
-                                                <p className="text-xs text-gray-600 mb-1">{color.role}</p>
-                                                <p className="text-xs text-green-700 font-medium">✓ {color.benefit}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Application Strategy */}
-                                <div className="mt-6 bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
-                                    <h4 className="font-bold text-green-900 mb-3">Application Strategy: {currentPalette.distribution}</h4>
-                                    <div className="space-y-2 text-sm text-gray-700">
-                                        <p><strong>Website Sections:</strong> Apply primary colors to hero, major sections, backgrounds</p>
-                                        <p><strong>CTAs & Buttons:</strong> Use accent colors for "Schedule Tour" and "Enroll Now" buttons</p>
-                                        <p><strong>Navigation & Links:</strong> Secondary colors for consistency and trust-building</p>
-                                        <p><strong>White Space:</strong> Generous use of neutral backgrounds prevents visual fatigue</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Site Structure View */}
-                    {currentView === 'structure' && (
-                        <div className="space-y-6">
-                            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 rounded-lg shadow-xl text-white mb-6">
-                                <h2 className="text-3xl font-bold mb-4">Site Architecture</h2>
-                                <p className="text-blue-100 text-lg">
-                                    Streamlined navigation focused on converting parents to tours and enrollments
-                                </p>
-                            </div>
-
-                            {keyPages.map((page, idx) => (
-                                <div key={idx} className="bg-white rounded-lg shadow-xl p-8 border-2 border-gray-200">
-                                    <div className="flex flex-col md:flex-row items-start justify-between mb-6 gap-4">
-                                        <div>
-                                            <h3 className="text-2xl font-bold text-gray-900 mb-2">{page.name}</h3>
-                                            <p className="text-lg text-gray-600">{page.goal}</p>
-                                        </div>
-                                        <div className={`px-4 py-2 rounded-lg font-semibold text-sm ${
-                                            page.priority === 'Critical'
-                                                ? 'bg-red-100 text-red-700 border-2 border-red-400'
-                                                : 'bg-yellow-100 text-yellow-700 border-2 border-yellow-400'
-                                        }`}>
-                                            {page.priority}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <p className="text-sm font-semibold text-gray-700 mb-3">Sections:</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {page.sections.map((section, sIdx) => (
-                                                <div key={sIdx} className="bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 text-sm text-blue-900">
-                                                    {section}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                        <div className="flex flex-wrap gap-6 text-sm text-stone-500">
+                            {HERO_BADGES.map((badge) => (
+                                <span key={badge}>{badge}</span>
                             ))}
-
-                            {/* User Journey */}
-                            <div className="bg-white rounded-lg shadow-xl p-8 border-2 border-gray-200">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-6">Typical Parent Journey</h3>
-                                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                                    {[
-                                        { step: 'Discover', action: 'Google search or referral', color: 'blue' },
-                                        { step: 'Explore', action: 'Browse programs & photos', color: 'green' },
-                                        { step: 'Trust', action: 'Read reviews & credentials', color: 'purple' },
-                                        { step: 'Act', action: 'Schedule tour', color: 'yellow' },
-                                        { step: 'Convert', action: 'Enroll', color: 'red' }
-                                    ].map((item, idx) => (
-                                        <React.Fragment key={idx}>
-                                            <div className="flex flex-col items-center">
-                                                <div className={`w-20 h-20 rounded-full bg-${item.color}-100 border-4 border-${item.color}-500 flex items-center justify-center mb-3`}>
-                                                    <span className={`text-2xl font-bold text-${item.color}-700`}>{idx + 1}</span>
-                                                </div>
-                                                <p className="font-bold text-gray-900 mb-1">{item.step}</p>
-                                                <p className="text-sm text-gray-600 text-center max-w-24">{item.action}</p>
-                                            </div>
-                                            {idx < 4 && (
-                                                <Icons.ChevronRight className="hidden md:block w-8 h-8 text-gray-400" />
-                                            )}
-                                        </React.Fragment>
-                                    ))}
-                                </div>
-                            </div>
                         </div>
-                    )}
-
-                    {/* Footer CTA */}
-                    <div className="mt-12 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 p-8 rounded-lg shadow-xl text-white">
-                        <div className="text-center">
-                            <h3 className="text-3xl font-bold mb-4">Ready to Build This?</h3>
-                            <p className="text-xl mb-6 text-gray-900">
-                                Modern, mobile-first design that converts browsers into enrolled families
-                            </p>
-                            <div className="flex flex-wrap justify-center gap-4">
-                                <div className="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold">
-                                    <Icons.Sparkles className="inline w-5 h-5 mr-2 text-yellow-500" />
-                                    Conversion-Optimized
+                    </div>
+                    <div className="relative">
+                        <div className="absolute -top-6 -left-6 w-24 h-24 bg-berry-200 rounded-3xl opacity-70 floaty"></div>
+                        <div className="absolute -bottom-8 -right-4 w-28 h-28 bg-lagoon-200 rounded-[2.5rem] opacity-70 floaty-delay"></div>
+                        <div className="glass rounded-[2.5rem] p-6 shadow-2xl">
+                            <div className="rounded-[2rem] overflow-hidden shadow-lg">
+                                <iframe
+                                    allow="fullscreen"
+                                    allowFullScreen
+                                    height="100%"
+                                    src="https://streamable.com/e/21wuu9?"
+                                    width="100%"
+                                    title="Bananafana video"
+                                    loading="eager"
+                                    className="w-full h-64"
+                                    style={{ border: 'none', overflow: 'hidden' }}
+                                ></iframe>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 mt-5 text-sm">
+                                <div className="bg-white rounded-2xl p-4 shadow">
+                                    <p className="text-stone-600">Ratio</p>
+                                    <p className="font-semibold text-stone-900">1:4 - 1:8</p>
                                 </div>
-                                <div className="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold">
-                                    <Icons.Smartphone className="inline w-5 h-5 mr-2 text-green-500" />
-                                    Mobile-First
-                                </div>
-                                <div className="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold">
-                                    <Icons.Users className="inline w-5 h-5 mr-2 text-blue-500" />
-                                    Parent-Focused
+                                <div className="bg-white rounded-2xl p-4 shadow">
+                                    <p className="text-stone-600">Days</p>
+                                    <p className="font-semibold text-stone-900">Mon - Fri</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
+        );
+
+        const ProgramsSection = () => (
+            <section id="programs" aria-labelledby="programs-heading" className={`${SECTION_CONTAINER} py-16`}>
+                <SectionHeading
+                    headingId="programs-heading"
+                    eyebrowClass="text-berry-600"
+                    eyebrow="Programs"
+                    title="Designed for every stage"
+                    description="Thoughtfully crafted classrooms, small group sizes, and a curriculum built for joyful learning and language growth."
+                />
+                <div className="grid gap-6 md:grid-cols-3">
+                    {PROGRAMS_DATA.map((program) => (
+                        <ProgramCard key={program.title} {...program} />
+                    ))}
+                </div>
+            </section>
+        );
+
+        const ApproachSection = () => (
+            <section id="approach" aria-labelledby="approach-heading" className={`${SECTION_CONTAINER} pb-16`}>
+                <div className="bg-white/80 rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-stone-100">
+                    <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+                        <div>
+                            <p className="text-sm uppercase tracking-[0.4em] text-lagoon-700">Our approach</p>
+                            <h2 id="approach-heading" className="font-display text-3xl md:text-4xl text-stone-900 mb-4">Playful learning with a global heart</h2>
+                            <p className="text-base text-stone-600 mb-6">
+                                We blend inquiry-based learning with Spanish immersion, creating a consistent rhythm of music, movement, literacy, and outdoor exploration.
+                            </p>
+                            <div className="grid gap-4 md:grid-cols-2">
+                                {VALUES_DATA.map((value) => (
+                                    <ValueCard key={value.title} {...value} />
+                                ))}
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            <FeatureListCard className="bg-banana-100 rounded-3xl p-6 shadow" title="Signature experiences" items={SIGNATURE_EXPERIENCES} />
+                            <FeatureListCard className="bg-lagoon-100 rounded-3xl p-6 shadow" title="Included in tuition" items={TUITION_INCLUDES} />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const LocationsSection = () => (
+            <section id="locations" aria-labelledby="locations-heading" className={`${SECTION_CONTAINER} pb-16`}>
+                <SectionHeading
+                    headingId="locations-heading"
+                    eyebrowClass="text-lagoon-700"
+                    eyebrow="Locations"
+                    title="Choose your campus"
+                    description="Two welcoming San Francisco campuses with consistent care, bilingual learning, and flexible schedules."
+                />
+                <div className="grid md:grid-cols-2 gap-8">
+                    {LOCATIONS_DATA.map((location) => (
+                        <LocationCard key={location.area} {...location} />
+                    ))}
+                </div>
+            </section>
+        );
+
+        const AdmissionsSection = () => (
+            <section id="admissions" aria-labelledby="admissions-heading" className={`${SECTION_CONTAINER} pb-16`}>
+                <div className="bg-gradient-to-br from-banana-100 via-white to-berry-100 rounded-[2.5rem] p-10 shadow-2xl">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                        <div>
+                            <p className="text-sm uppercase tracking-[0.4em] text-berry-600">Admissions</p>
+                            <h2 id="admissions-heading" className="font-display text-3xl md:text-4xl text-stone-900">A simple, warm process</h2>
+                        </div>
+                        <a href="mailto:hello@bananafana.com?subject=Start%20Enrollment" aria-label="Start enrollment" className="bg-stone-900 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-stone-800 transition">Start enrollment</a>
+                    </div>
+                    <div className="grid gap-4 mt-8 md:grid-cols-2">
+                        {ADMISSION_STEPS.map((step, index) => (
+                            <div key={step} className="bg-white/90 rounded-2xl p-5 border border-stone-100">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <span className="w-8 h-8 rounded-full bg-lagoon-500 text-white flex items-center justify-center text-sm font-semibold">{index + 1}</span>
+                                    <p className="font-semibold text-stone-900">{step}</p>
+                                </div>
+                                <p className="text-sm text-stone-600">We guide your family through each step with clarity and care.</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const GallerySection = () => (
+            <section id="gallery" aria-labelledby="gallery-heading" className={`${SECTION_CONTAINER} pb-16`}>
+                <SectionHeading
+                    headingId="gallery-heading"
+                    eyebrowClass="text-lagoon-700"
+                    eyebrow="Gallery"
+                    title="Moments that feel like home"
+                    description="Families see consistent routines, intentional learning, and joyful exploration in every corner."
+                />
+                <div className="grid gap-6 md:grid-cols-3">
+                    {GALLERY_IMAGES.map((img) => (
+                        <img key={img.src} loading="lazy" decoding="async" width="700" height="448" onError={handleImageError} className="rounded-[2rem] h-56 w-full object-cover shadow-lg" src={img.src} alt={img.alt} />
+                    ))}
+                </div>
+            </section>
+        );
+
+        const ResourcesSection = () => (
+            <section id="resources" aria-labelledby="resources-heading" className={`${SECTION_CONTAINER} pb-20`}>
+                <div className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-stone-100">
+                    <SectionHeading
+                        headingId="resources-heading"
+                        eyebrowClass="text-stone-500"
+                        eyebrow="Parent resources"
+                        title="Everything families ask for, in one place"
+                        description="Transparent tuition details, daily schedule expectations, and communication policies before your first tour."
+                    />
+                    <div className="grid gap-6 md:grid-cols-3">
+                        {RESOURCE_CARDS.map((resource) => (
+                            <article key={resource.title} className="bg-stone-50 rounded-2xl p-6 border border-stone-200">
+                                <h3 className="font-semibold text-stone-900 text-lg mb-3">{resource.title}</h3>
+                                <p className="text-sm text-stone-600 mb-5">{resource.description}</p>
+                                <a href={resource.actionHref} className="inline-flex bg-stone-900 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-stone-800 transition">
+                                    {resource.actionLabel}
+                                </a>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const CTASection = () => (
+            <section aria-labelledby="cta-heading" className={`${SECTION_CONTAINER} pb-24`}>
+                <div className="bg-lagoon-700 rounded-[2.5rem] p-10 text-white shadow-2xl">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                        <div>
+                            <h2 id="cta-heading" className="font-display text-3xl md:text-4xl">Ready to visit?</h2>
+                            <p className="text-base text-lagoon-100 mt-2 max-w-lg">We would love to meet your family. Tours are offered weekly at both campuses.</p>
+                        </div>
+                        <div className="flex flex-wrap gap-4">
+                            <a href="#admissions" aria-label="Schedule a tour" className="bg-white text-lagoon-800 px-6 py-3 rounded-full font-semibold">Schedule a Tour</a>
+                            <a href="mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request" aria-label="Download tuition guide" className="bg-lagoon-600 border border-lagoon-300 px-6 py-3 rounded-full font-semibold">Download Tuition Guide</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Footer = () => (
+            <footer className={`${SECTION_CONTAINER} pb-12 text-sm text-stone-500`}>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <p>Bananafana Preschool. Bilingual learning rooted in care.</p>
+                    <div className="flex gap-6">
+                        <span>hello@bananafana.com</span>
+                        <span>(415) 555-0198</span>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // --- Main App Component ---
+        const BananafanaLandingPage = () => {
+            const [isFirstDemoView, setIsFirstDemoView] = React.useState(false);
+
+            return (
+                <div className="text-stone-900 min-h-screen">
+                    <Header isFirstDemoView={isFirstDemoView} onToggleFirstDemoView={() => setIsFirstDemoView((previous) => !previous)} />
+                    <main id="main-content">
+                        {isFirstDemoView ? (
+                            <section aria-labelledby="first-demo-heading" className="w-full">
+                                <h2 id="first-demo-heading" className="sr-only">First Demo</h2>
+                                <iframe
+                                    src="firstdemo.html"
+                                    title="Bananafana first demo"
+                                    loading="eager"
+                                    className="w-full h-[calc(100vh-128px)] border-0"
+                                ></iframe>
+                            </section>
+                        ) : (
+                            <>
+                                <HeroSection />
+                                <ProgramsSection />
+                                <ApproachSection />
+                                <LocationsSection />
+                                <AdmissionsSection />
+                                <GallerySection />
+                                <ResourcesSection />
+                                <CTASection />
+                            </>
+                        )}
+                    </main>
+                    {!isFirstDemoView ? <Footer /> : null}
+                </div>
             );
         };
 
-        // Render the app
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<BananafanaWebsiteShowcase />);
+        root.render(<BananafanaLandingPage />);
     </script>
 </body>
+
 </html>
