@@ -1,0 +1,14 @@
+[   15075ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://winget.pro/favicon.ico:0
+[   17419ms] TypeError: Cannot set properties of null (setting 'oninput')
+    at new Slider (https://winget.pro/static/main/js/start.js:6:27)
+    at new DataTransferSlider (https://winget.pro/static/main/js/start.js:61:1)
+    at https://winget.pro/static/main/js/start.js:110:28
+[   22712ms] TypeError: Cannot set properties of null (setting 'oninput')
+    at new Slider (https://winget.pro/static/main/js/start.js:6:27)
+    at new DataTransferSlider (https://winget.pro/static/main/js/start.js:61:1)
+    at https://winget.pro/static/main/js/start.js:110:28
+[   30400ms] TypeError: Cannot set properties of null (setting 'oninput')
+    at new Slider (https://winget.pro/static/main/js/start.js:6:27)
+    at new DataTransferSlider (https://winget.pro/static/main/js/start.js:61:1)
+    at https://winget.pro/static/main/js/start.js:110:28
+[   47022ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://api.winget.pro/favicon.ico:0
