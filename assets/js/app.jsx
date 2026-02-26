@@ -1,4 +1,4 @@
-const { useState, useEffect, useMemo } = React;
+const { useState, useEffect, useLayoutEffect, useMemo } = React;
 
 // Lucide React Icons (simplified inline SVG versions)
 const Icons = {
@@ -75,19 +75,20 @@ const Icons = {
     )
 };
 
-const BananafanaWebsiteShowcase = () => {
-    const [currentView, setCurrentView] = useState('wireframes');
-    const [selectedWireframe, setSelectedWireframe] = useState('hero');
-    const [showMobile, setShowMobile] = useState(false);
-    const [selectedPalette, setSelectedPalette] = useState('nurturing');
-    const [isWalkthroughExpanded, setIsWalkthroughExpanded] = useState(false);
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const [visitedViews, setVisitedViews] = useState({
-        current: false,
-        wireframes: true,
-        principles: false,
-        structure: false
-    });
+        const BananafanaWebsiteShowcase = () => {
+            const [currentView, setCurrentView] = useState('wireframes');
+            const [selectedWireframe, setSelectedWireframe] = useState('hero');
+            const [showMobile, setShowMobile] = useState(false);
+            const [selectedPalette, setSelectedPalette] = useState('nurturing');
+            const [isWalkthroughExpanded, setIsWalkthroughExpanded] = useState(false);
+            const [scrollProgress, setScrollProgress] = useState(0);
+            const [visitedViews, setVisitedViews] = useState({
+                current: false,
+                wireframes: true,
+                principles: false,
+                structure: false
+            });
+            const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
 
     const changeView = (view) => {
         setCurrentView(view);
@@ -95,17 +96,21 @@ const BananafanaWebsiteShowcase = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const navigateToSection = (view, sectionId) => {
-        setCurrentView(view);
-        setVisitedViews((previous) => ({ ...previous, [view]: true }));
-        window.scrollTo({ top: 0, behavior: 'auto' });
-        setTimeout(() => {
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 80);
-    };
+            const navigateToSection = (view, sectionId) => {
+                setCurrentView(view);
+                setVisitedViews((previous) => ({ ...previous, [view]: true }));
+                window.scrollTo({ top: 0, behavior: 'auto' });
+                setPendingScrollTarget(sectionId);
+            };
+
+            useLayoutEffect(() => {
+                if (!pendingScrollTarget) return;
+                const targetSection = document.getElementById(pendingScrollTarget);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setPendingScrollTarget(null);
+                }
+            }, [pendingScrollTarget]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -213,13 +218,13 @@ const BananafanaWebsiteShowcase = () => {
 
     const currentPalette = colorPalettes[selectedPalette];
 
-    const ACTION_LINKS = {
-        scheduleTour: 'index.html#admissions',
-        tuitionGuide: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request',
-        contactAdmissions: 'mailto:hello@bananafana.com?subject=Admissions%20Question',
-        discoveryCall: 'mailto:hello@bananafana.com?subject=Discovery%20Call%20Request',
-        liveSite: 'index.html'
-    };
+            const ACTION_LINKS = {
+                scheduleTour: 'mailto:hello@bananafana.com?subject=Schedule%20a%20Tour',
+                tuitionGuide: 'mailto:hello@bananafana.com?subject=Tuition%20Guide%20Request',
+                contactAdmissions: 'mailto:hello@bananafana.com?subject=Admissions%20Question',
+                discoveryCall: 'mailto:hello@bananafana.com?subject=Discovery%20Call%20Request',
+                liveSite: 'index.html'
+            };
 
     const VIEW_LABELS = {
         current: 'Current Site',
@@ -388,10 +393,13 @@ const BananafanaWebsiteShowcase = () => {
             return;
         }
 
-        const currentIndex = VIEW_ORDER.indexOf(currentView);
-        if (currentIndex === -1) {
-            return;
-        }
+                const focusedTab = event.target.closest('[role="tab"]');
+                if (!focusedTab) return;
+                const focusedView = focusedTab.id.replace('tab-', '');
+                const currentIndex = VIEW_ORDER.indexOf(focusedView);
+                if (currentIndex === -1) {
+                    return;
+                }
 
         let nextView = null;
 
@@ -650,10 +658,10 @@ const BananafanaWebsiteShowcase = () => {
 
     const currentWireframe = wireframes[selectedWireframe];
 
-    return (
-        <main id="main-content">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
-                <nav aria-label="Presentation sections">
+            return (
+                <main id="main-content" tabIndex={-1}>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 bg-gradient-to-br from-yellow-50 via-white to-green-50 min-h-screen">
+                    <nav aria-label="Presentation sections">
                     <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 flex-wrap sticky top-0 z-40 bg-white/95 backdrop-blur-sm py-3 sm:py-4 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-b-lg shadow-sm" role="tablist" onKeyDown={handleTabKeyboardNavigation}>
                         <button
                             type="button"
